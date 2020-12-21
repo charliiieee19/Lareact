@@ -1,9 +1,58 @@
 (window["webpackJsonp"] = window["webpackJsonp"] || []).push([[2],{
 
-/***/ "./resources/js/components/About.js":
-/*!******************************************!*\
-  !*** ./resources/js/components/About.js ***!
-  \******************************************/
+/***/ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./resources/css/NotFound.css":
+/*!********************************************************************************************************************!*\
+  !*** ./node_modules/css-loader??ref--6-1!./node_modules/postcss-loader/src??ref--6-2!./resources/css/NotFound.css ***!
+  \********************************************************************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(/*! ../../node_modules/css-loader/lib/css-base.js */ "./node_modules/css-loader/lib/css-base.js")(false);
+// imports
+
+
+// module
+exports.push([module.i, "* {\r\n    box-sizing: border-box;\r\n}\r\n\r\nbody {\r\n    padding: 0;\r\n    margin: 0;\r\n}\r\n\r\n#notfound {\r\n    position: relative;\r\n    height: 100vh;\r\n}\r\n\r\n#notfound .notfound {\r\n    position: absolute;\r\n    left: 50%;\r\n    top: 50%;\r\n    transform: translate(-50%, -50%);\r\n}\r\n\r\n.notfound {\r\n    max-width: 460px;\r\n    width: 100%;\r\n    text-align: center;\r\n    line-height: 1.4;\r\n}\r\n\r\n.notfound .notfound-404 {\r\n    position: relative;\r\n    width: 180px;\r\n    height: 180px;\r\n    margin: 0px auto 50px;\r\n}\r\n\r\n.notfound .notfound-404 > div:first-child {\r\n    position: absolute;\r\n    left: 0;\r\n    right: 0;\r\n    top: 0;\r\n    bottom: 0;\r\n    background: #ffa200;\r\n    transform: rotate(45deg);\r\n    border: 5px dashed #000;\r\n    border-radius: 5px;\r\n}\r\n\r\n.notfound .notfound-404 > div:first-child:before {\r\n    content: \"\";\r\n    position: absolute;\r\n    left: -5px;\r\n    right: -5px;\r\n    bottom: -5px;\r\n    top: -5px;\r\n    box-shadow: 0px 0px 0px 5px rgba(0, 0, 0, 0.1) inset;\r\n    border-radius: 5px;\r\n}\r\n\r\n.notfound .notfound-404 h1 {\r\n    font-family: \"Cabin\", sans-serif;\r\n    color: #000;\r\n    font-weight: 700;\r\n    margin: 0;\r\n    font-size: 90px;\r\n    position: absolute;\r\n    top: 50%;\r\n    transform: translate(-50%, -50%);\r\n    left: 50%;\r\n    text-align: center;\r\n    height: 40px;\r\n    line-height: 40px;\r\n}\r\n\r\n.notfound h2 {\r\n    font-family: \"Cabin\", sans-serif;\r\n    font-size: 33px;\r\n    font-weight: 700;\r\n    text-transform: uppercase;\r\n    letter-spacing: 7px;\r\n    color: white;\r\n}\r\n\r\n.notfound p {\r\n    font-family: \"Cabin\", sans-serif;\r\n    font-size: 16px;\r\n    color: rgb(255, 255, 255);\r\n    font-weight: 400;\r\n}\r\n\r\n.notfound a {\r\n    font-family: \"Cabin\", sans-serif;\r\n    display: inline-block;\r\n    padding: 10px 25px;\r\n    background-color: #8f8f8f;\r\n    border: none;\r\n    border-radius: 40px;\r\n    color: #fff;\r\n    font-size: 14px;\r\n    font-weight: 700;\r\n    text-transform: uppercase;\r\n    text-decoration: none;\r\n    transition: 0.2s all;\r\n}\r\n\r\n.notfound a:hover {\r\n    background-color: #5c5c5c;\r\n}\r\n", ""]);
+
+// exports
+
+
+/***/ }),
+
+/***/ "./resources/css/NotFound.css":
+/*!************************************!*\
+  !*** ./resources/css/NotFound.css ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+
+var content = __webpack_require__(/*! !../../node_modules/css-loader??ref--6-1!../../node_modules/postcss-loader/src??ref--6-2!./NotFound.css */ "./node_modules/css-loader/index.js?!./node_modules/postcss-loader/src/index.js?!./resources/css/NotFound.css");
+
+if(typeof content === 'string') content = [[module.i, content, '']];
+
+var transform;
+var insertInto;
+
+
+
+var options = {"hmr":true}
+
+options.transform = transform
+options.insertInto = undefined;
+
+var update = __webpack_require__(/*! ../../node_modules/style-loader/lib/addStyles.js */ "./node_modules/style-loader/lib/addStyles.js")(content, options);
+
+if(content.locals) module.exports = content.locals;
+
+if(false) {}
+
+/***/ }),
+
+/***/ "./resources/js/components/NotFound.js":
+/*!*********************************************!*\
+  !*** ./resources/js/components/NotFound.js ***!
+  \*********************************************/
 /*! exports provided: default */
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
@@ -11,61 +60,26 @@
 __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! react */ "./node_modules/react/index.js");
 /* harmony import */ var react__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(react__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _material_ui_core__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @material-ui/core */ "./node_modules/@material-ui/core/esm/index.js");
-/* harmony import */ var _material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @material-ui/core/styles */ "./node_modules/@material-ui/core/esm/styles/index.js");
-/* harmony import */ var _MiniDrawer__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./MiniDrawer */ "./resources/js/components/MiniDrawer.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! axios */ "./node_modules/axios/index.js");
-/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(axios__WEBPACK_IMPORTED_MODULE_4__);
-function ownKeys(object, enumerableOnly) { var keys = Object.keys(object); if (Object.getOwnPropertySymbols) { var symbols = Object.getOwnPropertySymbols(object); if (enumerableOnly) symbols = symbols.filter(function (sym) { return Object.getOwnPropertyDescriptor(object, sym).enumerable; }); keys.push.apply(keys, symbols); } return keys; }
-
-function _objectSpread(target) { for (var i = 1; i < arguments.length; i++) { var source = arguments[i] != null ? arguments[i] : {}; if (i % 2) { ownKeys(Object(source), true).forEach(function (key) { _defineProperty(target, key, source[key]); }); } else if (Object.getOwnPropertyDescriptors) { Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)); } else { ownKeys(Object(source)).forEach(function (key) { Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key)); }); } } return target; }
-
-function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+/* harmony import */ var react_router_dom__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! react-router-dom */ "./node_modules/react-router-dom/esm/react-router-dom.js");
+/* harmony import */ var _css_NotFound_css__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../css/NotFound.css */ "./resources/css/NotFound.css");
+/* harmony import */ var _css_NotFound_css__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_css_NotFound_css__WEBPACK_IMPORTED_MODULE_2__);
 
 
 
 
-
-
-var useStyles = Object(_material_ui_core_styles__WEBPACK_IMPORTED_MODULE_2__["makeStyles"])(function (theme) {
-  return {
-    root: {
-      display: 'flex'
-    },
-    toolbar: _objectSpread({
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'flex-end',
-      padding: theme.spacing(0, 1)
-    }, theme.mixins.toolbar),
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3)
-    }
-  };
-});
-
-var About = function About() {
-  var classes = useStyles();
-  axios__WEBPACK_IMPORTED_MODULE_4___default.a.post('api/Login', {
-    Username: "charlie",
-    Password: "charlie"
-  }).then(function (res) {
-    console.log(res.data);
-    console.log("done");
-  })["catch"](function (error) {
-    console.log(error);
-  });
-  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: classes.root
-  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_MiniDrawer__WEBPACK_IMPORTED_MODULE_3__["default"], null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("main", {
-    className: classes.content
+var NotFound = function NotFound() {
+  return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    id: "notfound"
   }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
-    className: classes.toolbar
-  }), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "About")));
+    className: "notfound"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", {
+    className: "notfound-404"
+  }, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("div", null), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h1", null, "404")), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("h2", null, "Page not found"), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement("p", null, "The page you are looking for might have been removed had its name changed or is temporarily unavailable."), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(react_router_dom__WEBPACK_IMPORTED_MODULE_1__["Link"], {
+    to: "/"
+  }, "home page"))));
 };
 
-/* harmony default export */ __webpack_exports__["default"] = (About);
+/* harmony default export */ __webpack_exports__["default"] = (NotFound);
 
 /***/ })
 

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import {
    Button,
    Grid,
@@ -8,7 +8,8 @@ import {
    TextField,
    Checkbox,
    FormControlLabel,
-   Typography
+   Typography,
+   CircularProgress
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
 import { Link, useHistory } from 'react-router-dom';
@@ -20,10 +21,16 @@ const Login = () => {
    const [usernameHelperText, setUsernameHelperText] = useState("");
    const [passwordError, setPasswordError] = useState(false);
    const [passwordHelperText, setPasswordHelperText] = useState("");
-   const [isLoggedIn, setLoggedIn] = useState(false);
+   const [loading, setLoading] = useState(false);
    const [loginAlert, setLoginAlert] = useState(false);
    const [AlertMessage, setAlertMessage] = useState("");
    const history = useHistory();
+
+   const handleKeyDown = (event) => {
+      if (event.key === 'Enter') {
+         Login();
+      }
+   }
 
    const ShowPassChange = () => {
       if ($("#ShowPass").prop("checked")) {
@@ -82,28 +89,27 @@ const Login = () => {
       }
 
       if (isComplete) {
-         console.log("Complete");
+         setLoading(true);
 
          axios.post('api/Login', {
             "Username": Username,
             "Password": Password,
          }).then(res => {
-            console.log(res);
-
             if (res.data[0].Message === "1") {
                setLoginAlert(false);
-               history.push('/Home');
+               history.push('/Admin/Dashboard');
             } else {
                setAlertMessage(res.data[0].Message);
                setLoginAlert(true);
             }
+
+            setLoading(false);
          }).catch(err => {
             alert(err);
+            setLoading(false);
          });
       }
    }
-
-
 
    return (
       <div style={{ marginTop: '200px' }}>
@@ -124,6 +130,7 @@ const Login = () => {
                               helperText={usernameHelperText}
                               autoComplete="off"
                               spellCheck="false"
+                              onKeyDown={handleKeyDown}
                            />
                         </Grid>
                         <Grid item lg={12} style={{ marginBottom: '15px' }}>
@@ -138,6 +145,7 @@ const Login = () => {
                               helperText={passwordHelperText}
                               autoComplete="off"
                               spellCheck="false"
+                              onKeyDown={handleKeyDown}
                            />
                         </Grid>
                         <Grid item lg={12} style={{ marginBottom: '15px' }}>
@@ -152,7 +160,11 @@ const Login = () => {
                            }
                         </Grid>
                         <Grid item lg={12}>
-                           <Button variant="contained" color="primary" fullWidth onClick={Login}>Login</Button>
+                           <Button variant="contained" color="primary" fullWidth onClick={Login}>
+                              {
+                                 loading ? <CircularProgress size={24} color="inherit" /> : 'Login'
+                              }
+                           </Button>
                         </Grid>
                      </Grid>
                   </CardContent>

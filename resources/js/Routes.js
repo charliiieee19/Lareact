@@ -3,7 +3,6 @@ import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import '../css/app.css';
 import LazyLoading from "./LazyLoading";
-import MiniDrawer from './components/MiniDrawer'
 import TopBarProgress from "react-topbar-progress-indicator";
 import { createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
@@ -22,13 +21,14 @@ TopBarProgress.config({
 });
 
 const Login = LazyLoading(() => import("./components/Login"), { fallback: <TopBarProgress /> });
-const Home = LazyLoading(() => import("./components/Home"), { fallback: <TopBarProgress /> });
-const About = LazyLoading(() => import("./components/About"), { fallback: <TopBarProgress /> });
+const Dashboard = LazyLoading(() => import("./components/Admin/Dashboard"), { fallback: <TopBarProgress /> });
+const About = LazyLoading(() => import("./components/Admin/About"), { fallback: <TopBarProgress /> });
 const NotFound = LazyLoading(() => import("./components/NotFound"), { fallback: <TopBarProgress /> });
 
 const PrivateRoute = ({ children, ...rest }) => {
    const [session, setSession] = React.useState([]);
-   fetch('api/SessionCheck')
+   
+   fetch('/api/SessionCheck')
       .then(res => res.json()
          .then(res => {
             setSession(res);
@@ -59,10 +59,10 @@ const Routes = () => {
                   <Route exact path="/">
                      <Login />
                   </Route>
-                  <PrivateRoute exact path="/Home">
-                     <Home />
+                  <PrivateRoute exact path="/Admin/Dashboard">
+                     <Dashboard />
                   </PrivateRoute>
-                  <PrivateRoute exact path="/About">
+                  <PrivateRoute exact path="/Admin/About">
                      <About />
                   </PrivateRoute>
                   <Route path="*">

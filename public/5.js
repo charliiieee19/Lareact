@@ -60,8 +60,8 @@ var Login = function Login() {
 
   var _useState9 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState10 = _slicedToArray(_useState9, 2),
-      isLoggedIn = _useState10[0],
-      setLoggedIn = _useState10[1];
+      loading = _useState10[0],
+      setLoading = _useState10[1];
 
   var _useState11 = Object(react__WEBPACK_IMPORTED_MODULE_0__["useState"])(false),
       _useState12 = _slicedToArray(_useState11, 2),
@@ -74,6 +74,12 @@ var Login = function Login() {
       setAlertMessage = _useState14[1];
 
   var history = Object(react_router_dom__WEBPACK_IMPORTED_MODULE_3__["useHistory"])();
+
+  var handleKeyDown = function handleKeyDown(event) {
+    if (event.key === 'Enter') {
+      Login();
+    }
+  };
 
   var ShowPassChange = function ShowPassChange() {
     if (jquery__WEBPACK_IMPORTED_MODULE_4___default()("#ShowPass").prop("checked")) {
@@ -130,22 +136,23 @@ var Login = function Login() {
     }
 
     if (isComplete) {
-      console.log("Complete");
+      setLoading(true);
       axios__WEBPACK_IMPORTED_MODULE_5___default.a.post('api/Login', {
         "Username": Username,
         "Password": Password
       }).then(function (res) {
-        console.log(res);
-
         if (res.data[0].Message === "1") {
           setLoginAlert(false);
-          history.push('/Home');
+          history.push('/Admin/Dashboard');
         } else {
           setAlertMessage(res.data[0].Message);
           setLoginAlert(true);
         }
+
+        setLoading(false);
       })["catch"](function (err) {
         alert(err);
+        setLoading(false);
       });
     }
   };
@@ -187,7 +194,8 @@ var Login = function Login() {
     },
     helperText: usernameHelperText,
     autoComplete: "off",
-    spellCheck: "false"
+    spellCheck: "false",
+    onKeyDown: handleKeyDown
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Grid"], {
     item: true,
     lg: 12,
@@ -206,7 +214,8 @@ var Login = function Login() {
     },
     helperText: passwordHelperText,
     autoComplete: "off",
-    spellCheck: "false"
+    spellCheck: "false",
+    onKeyDown: handleKeyDown
   })), /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["Grid"], {
     item: true,
     lg: 12,
@@ -234,7 +243,10 @@ var Login = function Login() {
     color: "primary",
     fullWidth: true,
     onClick: Login
-  }, "Login"))))))));
+  }, loading ? /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_0___default.a.createElement(_material_ui_core__WEBPACK_IMPORTED_MODULE_1__["CircularProgress"], {
+    size: 24,
+    color: "inherit"
+  }) : 'Login'))))))));
 };
 
 /* harmony default export */ __webpack_exports__["default"] = (Login);
