@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Charlie</title>
+    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests"> 
     <link href="{{ asset('css/app.css') }}" rel="stylesheet">
 </head>
 
