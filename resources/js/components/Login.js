@@ -12,7 +12,7 @@ import {
    CircularProgress
 } from '@material-ui/core';
 import { Alert } from '@material-ui/lab';
-import { Link, useHistory } from 'react-router-dom';
+import { Link, useHistory, Redirect } from 'react-router-dom';
 import $ from 'jquery';
 import axios from 'axios';
 
@@ -96,14 +96,12 @@ const Login = () => {
             "Password": Password,
          }).then(res => {
             if (res.data[0].Message === "1") {
-               setLoginAlert(false);
                history.push('/Admin/Dashboard');
             } else {
                setAlertMessage(res.data[0].Message);
                setLoginAlert(true);
+               setLoading(false);
             }
-
-            setLoading(false);
          }).catch(err => {
             alert(err);
             setLoading(false);

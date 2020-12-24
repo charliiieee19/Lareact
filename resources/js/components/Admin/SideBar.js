@@ -16,10 +16,10 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { Button } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
+import axios from 'axios';
 
 const drawerWidth = 240;
-
 const useStyles = makeStyles((theme) => ({
    root: {
       display: 'flex',
@@ -51,17 +51,30 @@ const useStyles = makeStyles((theme) => ({
       flexGrow: 1,
       padding: theme.spacing(3),
    },
+   ListItems: {
+      padding: '10px 8px'
+   }
 }));
 
-function SideBar(props) {
+const SideBar = (props) => {
    const { window } = props;
    const classes = useStyles();
    const theme = useTheme();
    const [mobileOpen, setMobileOpen] = React.useState(false);
+   const history = useHistory();
 
    const handleDrawerToggle = () => {
       setMobileOpen(!mobileOpen);
    };
+
+   const handleLogout = () => {
+      axios.get('/api/Logout')
+         .then(res => {
+            history.push('/');
+         }).catch(error => {
+            alert(error);
+         });
+   }
 
    const drawer = (
       <div>
@@ -100,7 +113,7 @@ function SideBar(props) {
    const container = window !== undefined ? () => window().document.body : undefined;
 
    return (
-      <div>
+      <div className={classes.root}>
          <CssBaseline />
          <AppBar position="fixed" className={classes.appBar} color="secondary">
             <Toolbar>
@@ -115,7 +128,7 @@ function SideBar(props) {
                </IconButton>
 
                <div style={{ flexGrow: 1 }}></div>
-               <Button color="inherit" component={Link} to="/">Logout</Button>
+               <Button color="inherit" onClick={handleLogout}>Logout</Button>
             </Toolbar>
          </AppBar>
          <nav className={classes.drawer}>

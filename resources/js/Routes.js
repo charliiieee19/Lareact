@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
-import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Switch, Route, Redirect, useRouteMatch } from 'react-router-dom';
 import '../css/app.css';
 import LazyLoading from "./LazyLoading";
 import TopBarProgress from "react-topbar-progress-indicator";
@@ -24,14 +24,18 @@ const Login = LazyLoading(() => import("./components/Login"), { fallback: <TopBa
 const Dashboard = LazyLoading(() => import("./components/Admin/Dashboard"), { fallback: <TopBarProgress /> });
 const About = LazyLoading(() => import("./components/Admin/About"), { fallback: <TopBarProgress /> });
 const NotFound = LazyLoading(() => import("./components/NotFound"), { fallback: <TopBarProgress /> });
+const AdminMain = LazyLoading(() => import("./components/Admin/Main"), { fallback: <TopBarProgress /> });
 
 const PrivateRoute = ({ children, ...rest }) => {
-   const [session, setSession] = React.useState([]);
-   
+   // const [session, setSession] = React.useState([]);
+   let session = null;
+
    fetch('/api/SessionCheck')
       .then(res => res.json()
          .then(res => {
-            setSession(res);
+            console.log(res !== null);
+            session = res;
+            console.log(session);
          })
          .catch(err => {
             console.log(err);
@@ -40,11 +44,9 @@ const PrivateRoute = ({ children, ...rest }) => {
    return (
       <Route {...rest}
          render={() => {
-            return session !== null
+            return session !== null 
                ? children
-               : <Redirect to={{
-                  pathname: '/'
-               }} />
+               : <Redirect to="/" />
          }}
       />
    )
@@ -59,12 +61,19 @@ const Routes = () => {
                   <Route exact path="/">
                      <Login />
                   </Route>
-                  <PrivateRoute exact path="/Admin/Dashboard">
-                     <Dashboard />
-                  </PrivateRoute>
-                  <PrivateRoute exact path="/Admin/About">
-                     <About />
-                  </PrivateRoute>
+                  <Route
+                     path="/Admin"
+                     render={({ match: { path } }) => (
+                        <AdminMain>
+                           <Switch>
+                              <Route exact path={`/${path}`} component={Dashboard} />
+                              <Route path={`${path}/Dashboard`} component={Dashboard} />
+                              <Route path={`${path}/About`} component={About} />
+                              <Redirect from={`${path}/*`} to="/*" />
+                           </Switch>
+                        </AdminMain>
+                     )}
+                  />
                   <Route path="*">
                      <NotFound />
                   </Route>
