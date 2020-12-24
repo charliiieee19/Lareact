@@ -31,4 +31,11 @@ class StudentController extends Controller
     {
         return json_encode(session('isLoggedIn'));
     }
+
+    public function UserList()
+    {
+        $query = DB::select('SELECT * FROM students');
+
+        return json_encode($query);
+    }
 }

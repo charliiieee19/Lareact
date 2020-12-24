@@ -121,7 +121,7 @@ const Dashboard = () => {
                            gutterBottom
                            variant="h6"
                         >
-                           Requests
+                           Approved <br /> Requests
                               </Typography>
                         <Typography
                            color="textPrimary"
@@ -138,21 +138,6 @@ const Dashboard = () => {
                         </Avatar>
                      </Grid>
                   </Grid>
-                  <Box
-                     mt={2}
-                     display="flex"
-                     alignItems="center"
-                  >
-                     <Typography variant="body2" style={{ marginRight: 10 }}>
-                        12%
-                           </Typography>
-                     <Typography
-                        color="textSecondary"
-                        variant="caption"
-                     >
-                        Since last month
-                           </Typography>
-                  </Box>
                </CardContent>
             </Card>
          </Grid>

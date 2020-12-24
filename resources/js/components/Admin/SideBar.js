@@ -11,15 +11,20 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import MailIcon from '@material-ui/icons/Mail';
 import MenuIcon from '@material-ui/icons/Menu';
-import { DashboardRounded } from '@material-ui/icons';
+import {
+   DashboardRounded,
+   ExpandLessRounded,
+   ExpandMoreRounded,
+   SettingsRounded
+} from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { Button } from '@material-ui/core';
+import { Button, Collapse } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
 
-const drawerWidth = 240;
+const drawerWidth = 250;
 const useStyles = makeStyles((theme) => ({
    root: {
       display: 'flex',
@@ -61,11 +66,16 @@ const SideBar = (props) => {
    const classes = useStyles();
    const theme = useTheme();
    const [mobileOpen, setMobileOpen] = React.useState(false);
+   const [listOpen, setListOpen] = React.useState(false);
    const history = useHistory();
 
    const handleDrawerToggle = () => {
       setMobileOpen(!mobileOpen);
    };
+
+   const handleListOpen = () => {
+      setListOpen(!listOpen);
+   }
 
    const handleLogout = () => {
       axios.get('/api/Logout')
@@ -91,12 +101,20 @@ const SideBar = (props) => {
                </ListItemIcon>
                <ListItemText primary="Dashboard" />
             </ListItem>
-            <ListItem button component={Link} to="About">
+            <ListItem button onClick={handleListOpen}>
                <ListItemIcon>
-                  <MailIcon />
+                  <SettingsRounded />
                </ListItemIcon>
-               <ListItemText primary="About" />
+               <ListItemText primary="Manage" />
+               {listOpen ? <ExpandLessRounded /> : <ExpandMoreRounded />}
             </ListItem>
+            <Collapse in={listOpen} timeout="auto" unmountOnExit>
+               <List disablePadding>
+                  <ListItem button style={{ paddingLeft: theme.spacing(4) }} component={Link} to="About">
+                     <ListItemText primary="Today Schedules" />
+                  </ListItem>
+               </List>
+            </Collapse>
          </List>
          <Divider />
          <List>
