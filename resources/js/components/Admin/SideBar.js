@@ -90,12 +90,12 @@ const SideBar = (props) => {
       <div>
          <div className={classes.toolbar}>
             <Typography variant="h6" style={{ textAlign: 'center', paddingTop: '15px' }}>
-               Charlie
+               ADMIN
             </Typography>
          </div>
          <Divider />
          <List>
-            <ListItem button component={Link} to="Dashboard">
+            <ListItem button component={Link} to="Dashboard" onClick={() => setMobileOpen(false)}>
                <ListItemIcon>
                   <DashboardRounded />
                </ListItemIcon>
@@ -110,8 +110,13 @@ const SideBar = (props) => {
             </ListItem>
             <Collapse in={listOpen} timeout="auto" unmountOnExit>
                <List disablePadding>
-                  <ListItem button style={{ paddingLeft: theme.spacing(4) }} component={Link} to="About">
+                  <ListItem button style={{ paddingLeft: theme.spacing(4) }} component={Link} to="About" onClick={() => setMobileOpen(false)}>
                      <ListItemText primary="Today Schedules" />
+                  </ListItem>
+               </List>
+               <List disablePadding>
+                  <ListItem button style={{ paddingLeft: theme.spacing(4) }} component={Link} to="UserList" onClick={() => setMobileOpen(false)}>
+                     <ListItemText primary="UserLists" />
                   </ListItem>
                </List>
             </Collapse>

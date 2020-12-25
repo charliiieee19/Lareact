@@ -5,7 +5,8 @@ import {
    Toolbar,
    Container,
    Table,
-   Button
+   Button,
+   TextField
 } from '@material-ui/core';
 import {
    EditRounded
@@ -18,17 +19,17 @@ const About = () => {
    const [TableRows, setTableRows] = useState([]);
    let TableRowsPartial = [];
    let TableColumns = [
-      { field: 'id', headerName: 'UserID', width: 200 },
+      { field: 'id', headerName: 'UserID', width: 150 },
       { field: 'lastname', headerName: 'LastName', width: 200 },
       { field: 'firstname', headerName: 'FirstName', width: 200 },
-      { field: 'middlename', headerName: 'MiddleName', width: 200 },
+      { field: 'middlename', headerName: 'MiddleName', width: 150 },
       {
          field: 'Action',
          headerName: 'Action',
          width: 200,
          renderCell: (params) => (
             <Button variant="contained" color="primary" size="small" onClick={() => ViewEdit(`${params.value}`)}>
-               <EditRounded fontSize="small" style={{marginRight: 5}} /> View / Edit
+               <EditRounded fontSize="small" style={{ marginRight: 5 }} /> View / Edit
             </Button>
          )
       }
@@ -67,6 +68,14 @@ const About = () => {
    return (
       <div>
          <div style={{ height: '70vh', width: '100%' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10 }}>
+               <TextField
+                  variant="outlined"
+                  label="Search"
+                  size="small"
+                  type="search"
+               />
+            </div>
             <DataGrid
                pageSize={10}
                rowsPerPageOptions={[10, 25, 50, 100]}

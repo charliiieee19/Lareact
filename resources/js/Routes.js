@@ -21,9 +21,10 @@ TopBarProgress.config({
 });
 
 const Login = LazyLoading(() => import("./components/Login"), { fallback: <TopBarProgress /> });
-const Dashboard = LazyLoading(() => import("./components/Admin/Dashboard"), { fallback: <TopBarProgress /> });
-const About = LazyLoading(() => import("./components/Admin/About"), { fallback: <TopBarProgress /> });
 const NotFound = LazyLoading(() => import("./components/NotFound"), { fallback: <TopBarProgress /> });
+const AdminDashboard = LazyLoading(() => import("./components/Admin/Dashboard"), { fallback: <TopBarProgress /> });
+const AdminAbout = LazyLoading(() => import("./components/Admin/About"), { fallback: <TopBarProgress /> });
+const AdminUserList = LazyLoading(() => import("./components/Admin/UserList"), { fallback: <TopBarProgress /> });
 const AdminMain = LazyLoading(() => import("./components/Admin/Main"), { fallback: <TopBarProgress /> });
 
 const PrivateRoute = ({ children, ...rest }) => {
@@ -44,7 +45,7 @@ const PrivateRoute = ({ children, ...rest }) => {
    return (
       <Route {...rest}
          render={() => {
-            return session !== null 
+            return session !== null
                ? children
                : <Redirect to="/" />
          }}
@@ -66,9 +67,10 @@ const Routes = () => {
                      render={({ match: { path } }) => (
                         <AdminMain>
                            <Switch>
-                              <Route exact path={`/${path}`} component={Dashboard} />
-                              <Route path={`${path}/Dashboard`} component={Dashboard} />
-                              <Route path={`${path}/About`} component={About} />
+                              <Route exact path={`/${path}`} component={AdminDashboard} />
+                              <Route path={`${path}/Dashboard`} component={AdminDashboard} />
+                              <Route path={`${path}/About`} component={AdminAbout} />
+                              <Route path={`${path}/UserList`} component={AdminUserList} />
                               <Redirect from={`${path}/*`} to="/*" />
                            </Switch>
                         </AdminMain>
