@@ -95,7 +95,7 @@ const SideBar = (props) => {
          </div>
          <Divider />
          <List>
-            <ListItem button component={Link} to="Dashboard" onClick={() => setMobileOpen(false)}>
+            <ListItem button component={Link} to="/Admin/Dashboard" onClick={() => setMobileOpen(false)}>
                <ListItemIcon>
                   <DashboardRounded />
                </ListItemIcon>
@@ -110,12 +110,12 @@ const SideBar = (props) => {
             </ListItem>
             <Collapse in={listOpen} timeout="auto" unmountOnExit>
                <List disablePadding>
-                  <ListItem button style={{ paddingLeft: theme.spacing(4) }} component={Link} to="About" onClick={() => setMobileOpen(false)}>
+                  <ListItem button style={{ paddingLeft: theme.spacing(4) }} component={Link} to="/Admin/About" onClick={() => setMobileOpen(false)}>
                      <ListItemText primary="Today Schedules" />
                   </ListItem>
                </List>
                <List disablePadding>
-                  <ListItem button style={{ paddingLeft: theme.spacing(4) }} component={Link} to="UserList" onClick={() => setMobileOpen(false)}>
+                  <ListItem button style={{ paddingLeft: theme.spacing(4) }} component={Link} to="/Admin/UserList" onClick={() => setMobileOpen(false)}>
                      <ListItemText primary="UserLists" />
                   </ListItem>
                </List>
@@ -123,7 +123,7 @@ const SideBar = (props) => {
          </List>
          <Divider />
          <List>
-            <ListItem button component={Link} to="ContactUs">
+            <ListItem button component={Link} to="/ContactUs">
                <ListItemIcon>
                   <MailIcon />
                </ListItemIcon>

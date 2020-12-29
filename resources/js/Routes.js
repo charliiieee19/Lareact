@@ -25,6 +25,7 @@ const NotFound = LazyLoading(() => import("./components/NotFound"), { fallback: 
 const AdminDashboard = LazyLoading(() => import("./components/Admin/Dashboard"), { fallback: <TopBarProgress /> });
 const AdminAbout = LazyLoading(() => import("./components/Admin/About"), { fallback: <TopBarProgress /> });
 const AdminUserList = LazyLoading(() => import("./components/Admin/UserList"), { fallback: <TopBarProgress /> });
+const AdminUserViewEdit = LazyLoading(() => import("./components/Admin/UserViewEdit"), { fallback: <TopBarProgress /> });
 const AdminMain = LazyLoading(() => import("./components/Admin/Main"), { fallback: <TopBarProgress /> });
 
 const PrivateRoute = ({ children, ...rest }) => {
@@ -71,6 +72,7 @@ const Routes = () => {
                               <Route path={`${path}/Dashboard`} component={AdminDashboard} />
                               <Route path={`${path}/About`} component={AdminAbout} />
                               <Route path={`${path}/UserList`} component={AdminUserList} />
+                              <Route path={`${path}/UserViewEdit/:id`} component={AdminUserViewEdit} />
                               <Redirect from={`${path}/*`} to="/*" />
                            </Switch>
                         </AdminMain>

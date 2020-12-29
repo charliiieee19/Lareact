@@ -41,21 +41,41 @@ class StudentController extends Controller
 
    public function UserList2(Request $request)
    {
+      $query = '';
+      $qTotalRows = '';
       $page = $request->get('page');
       $perpage = $request->get('perpage');
       $offset = $perpage * ($page - 1);
-      $string = 'SELECT studNo, fname, mname, lname FROM students ORDER BY fname ASC LIMIT ' . $offset . ',' . $perpage;
+      $key = $request->get('key');
 
-      $query = DB::select(
-         'SELECT SQNC, studNo, fname, mname, lname FROM students ORDER BY lname ASC LIMIT ' . $offset . ',' . $perpage
-      );
+      if ($key === "") {
+         $query = 'SELECT SQNC, studNo, fname, mname, lname FROM students ORDER BY lname ASC LIMIT ' . $offset . ',' . $perpage;
+         $qTotalRows = 'SELECT COUNT(*) AS "Total" FROM students';
+      } else {
+         $query = 'SELECT SQNC, studNo, fname, mname, lname FROM students 
+               WHERE studNo LIKE "%' . $key . '%" 
+               OR lname LIKE "%' . $key . '%" 
+               OR fname LIKE "%' . $key . '%" 
+               OR mname LIKE "%' . $key . '%" 
+               OR address LIKE "%' . $key . '%" 
+               ORDER BY lname ASC LIMIT ' . $offset . ',' . $perpage;
 
-      $qTotalRows = DB::select('SELECT COUNT(*) AS "Total" FROM students');
+         $qTotalRows = 'SELECT COUNT(*) AS "Total" FROM students 
+               WHERE studNo LIKE "%' . $key . '%" 
+               OR lname LIKE "%' . $key . '%" 
+               OR fname LIKE "%' . $key . '%" 
+               OR mname LIKE "%' . $key . '%" 
+               OR address LIKE "%' . $key . '%" ';
+      }
+
+      $sql = DB::select($query);
+
+      $sqlTotalRow = DB::select($qTotalRows);
 
       $res = array(
-         'totalRows' => $qTotalRows[0]->Total,
-         'data' => $query,
-         'q' => $string
+         'totalRows' => $sqlTotalRow[0]->Total,
+         'data' => $sql,
+         'q' => $query
       );
       return json_encode($res);
    }

@@ -1,17 +1,21 @@
 import React, { useState, useEffect } from 'react';
 import DataTable from 'react-data-table-component';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import {
    Button,
-   CircularProgress
+   CircularProgress,
+   TextField
 } from '@material-ui/core';
 
 
 const UserList = () => {
+   const history = useHistory();
    const [users, setUsers] = useState([]);
    const [page, setPage] = useState(1);
    const [countPerPage, setCountPerPage] = useState(10);
    const [tableLoading, setTableLoading] = useState(true);
+   const [userSearch, setUserSearch] = useState("");
 
    const Loading = (
       <CircularProgress />
@@ -29,13 +33,13 @@ const UserList = () => {
    ];
 
    const ViewEdit = (id) => {
-      console.log(id);
+      history.push(`UserViewEdit/${id}`);
    }
 
    const GetData = () => {
       setTableLoading(true);
 
-      axios.get(`/api/UserList2?page=${page}&perpage=${countPerPage}`)
+      axios.get(`/api/UserList2?page=${page}&perpage=${countPerPage}&key=${userSearch}`)
          .then(res => {
             setUsers(res.data);
             setTableLoading(false);
@@ -44,13 +48,20 @@ const UserList = () => {
          });
    }
 
+   const handleSearch = (event) => {
+      setUserSearch(event.target.value);
+   }
+
    useEffect(() => {
       GetData();
-   }, [page, countPerPage]);
+   }, [page, countPerPage, userSearch]);
 
    return (
       <div>
          <div>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10 }}>
+               <TextField variant="outlined" label="Search" type="search" size="small" onInput={event => handleSearch(event)} />
+            </div>
             <DataTable
                theme="dark"
                title="User Lists"
