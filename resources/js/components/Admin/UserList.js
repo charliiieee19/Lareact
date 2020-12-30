@@ -5,7 +5,8 @@ import axios from 'axios';
 import {
    Button,
    CircularProgress,
-   TextField
+   TextField,
+   colors
 } from '@material-ui/core';
 
 
@@ -22,13 +23,29 @@ const UserList = () => {
    );
 
    const columns = [
-      { name: 'StudentID', selector: 'studNo', grow: 1 },
-      { name: 'LastName', selector: 'lname', grow: 1 },
-      { name: 'FirstName', selector: 'fname', grow: 1 },
-      { name: 'MiddleName', selector: 'mname', grow: 1 },
+      { name: 'StudentID', selector: 'studNo' },
+      { name: 'LastName', selector: 'lname' },
+      { name: 'FirstName', selector: 'fname' },
+      { name: 'MiddleName', selector: 'mname' },
       {
          name: 'Action',
-         cell: row => <Button variant="contained" size="small" color="primary" onClick={() => ViewEdit(`${row.SQNC}`)}>View / Edit</Button>
+         minWidth: '250px',
+         cell: row => (
+            <div>
+               <Button variant="contained" size="small" color="primary" onClick={() => ViewEdit(`${row.SQNC}`)}>View / Edit</Button>
+               <Button
+                  variant="contained"
+                  size="small"
+                  style={{
+                     backgroundColor: colors.red[700],
+                     color: 'white',
+                     marginLeft: 5
+                  }}
+               >
+                  Delete
+               </Button>
+            </div>
+         )
       },
    ];
 
@@ -62,23 +79,29 @@ const UserList = () => {
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10 }}>
                <TextField variant="outlined" label="Search" type="search" size="small" onInput={event => handleSearch(event)} />
             </div>
-            <DataTable
-               theme="dark"
-               title="User Lists"
-               columns={columns}
-               data={users.data}
-               pagination
-               paginationServer
-               paginationTotalRows={users.totalRows}
-               paginationPerPage={countPerPage}
-               onChangeRowsPerPage={pagerow => setCountPerPage(pagerow)}
-               paginationRowsPerPageOptions={[10, 25, 50, 100]}
-               onChangePage={page => setPage(page)}
-               progressPending={tableLoading}
-               progressComponent={Loading}
-               responsive
-               highlightOnHover
-            />
+            <div style={{
+               display: 'block',
+               width: '100%',
+               overflowX: 'auto',
+               WebkitOverflowScrolling: 'touch'
+            }}>
+               <DataTable
+                  theme="dark"
+                  title="User Lists"
+                  columns={columns}
+                  data={users.data}
+                  pagination
+                  paginationServer
+                  paginationTotalRows={users.totalRows}
+                  paginationPerPage={countPerPage}
+                  onChangeRowsPerPage={pagerow => setCountPerPage(pagerow)}
+                  paginationRowsPerPageOptions={[10, 25, 50, 100]}
+                  onChangePage={page => setPage(page)}
+                  progressPending={tableLoading}
+                  progressComponent={Loading}
+                  responsive
+               />
+            </div>
          </div>
       </div>
    );

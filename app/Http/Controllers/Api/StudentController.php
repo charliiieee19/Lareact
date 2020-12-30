@@ -69,7 +69,6 @@ class StudentController extends Controller
       }
 
       $sql = DB::select($query);
-
       $sqlTotalRow = DB::select($qTotalRows);
 
       $res = array(
@@ -77,6 +76,33 @@ class StudentController extends Controller
          'data' => $sql,
          'q' => $query
       );
+      return json_encode($res);
+   }
+
+   public function GetUserInfo(Request $request)
+   {
+      $SQNC = $request->post('SQNC');
+
+      $sql = DB::select('SELECT * FROM students WHERE SQNC = ?', array($SQNC));
+
+      $res = array(
+         'success' => true,
+         'data' => $sql
+      );
+
+      return json_encode($res);
+   }
+
+   public function UserInfoDropdown()
+   {
+      $qCourses = DB::select('SELECT * FROM courses');
+      $qColleges = DB::select('SELECT * FROM colleges');
+
+      $res = array(
+         'Courses' => $qCourses,
+         'Colleges' => $qColleges
+      );
+
       return json_encode($res);
    }
 }
