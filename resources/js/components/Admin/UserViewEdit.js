@@ -11,12 +11,14 @@ import {
    Select,
    MenuItem,
    FormControl,
-   colors
+   colors,
+   LinearProgress
 } from '@material-ui/core';
 import axios from 'axios';
 
 const UserViewEdit = () => {
    let { id } = useParams();
+   const [isLoaded, setIsLoaded] = useState(false);
    const [DDCourses, setDDCourses] = useState([]);
    const [DDColleges, setDDColleges] = useState([]);
    const [StudentID, setStudentID] = useState("");
@@ -55,6 +57,8 @@ const UserViewEdit = () => {
             setGuardian(res.data.data[0].guardian);
             setContactNo(res.data.data[0].guardian_contact);
             setAddress(res.data.data[0].address);
+
+            setIsLoaded(true);
          }).catch(error => {
             alert(error);
          })
@@ -64,152 +68,160 @@ const UserViewEdit = () => {
       DropdownData()
    }, []);
 
+   const Body = (
+      <div>
+         <Grid container spacing={3}>
+            <Grid item lg={12} md={6} sm={12} xs={12}>
+               <TextField
+                  variant="outlined"
+                  label="Student ID"
+                  fullWidth
+                  value={StudentID}
+               />
+            </Grid>
+         </Grid>
+         <Grid container spacing={3}>
+            <Grid item lg={4} md={6} sm={12} xs={12}>
+               <TextField
+                  variant="outlined"
+                  label="FirstName"
+                  fullWidth
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={FirstName}
+                  onInput={event => setFirstName(event.target.value)}
+               />
+            </Grid>
+            <Grid item lg={4} md={6} sm={12} xs={12}>
+               <TextField
+                  variant="outlined"
+                  label="MiddleName"
+                  fullWidth
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={MiddleName}
+                  onInput={event => setMiddleName(event.target.value)}
+               />
+            </Grid>
+            <Grid item lg={4} md={6} sm={12} xs={12}>
+               <TextField
+                  variant="outlined"
+                  label="LastName"
+                  fullWidth
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={LastName}
+                  onInput={event => setLastName(event.target.value)}
+               />
+            </Grid>
+         </Grid>
+         <Grid container spacing={3}>
+            <Grid item lg={4} md={6} sm={12} xs={12}>
+               <FormControl variant="outlined" fullWidth>
+                  <InputLabel id="CourseLabel">Course</InputLabel>
+                  <Select
+                     labelId="CourseLabel"
+                     fullWidth
+                     value={Course}
+                     label="Course"
+                     onChange={event => setCourse(event.target.value)}
+                  >
+                     {
+                        DDCourses.map(data => (
+                           <MenuItem
+                              key={data.id}
+                              value={data.courseName}
+                           >{data.courseName}</MenuItem>
+                        ))
+                     }
+                  </Select>
+               </FormControl>
+            </Grid>
+            <Grid item lg={8} md={6} sm={12} xs={12}>
+               <FormControl variant="outlined" fullWidth>
+                  <InputLabel id="CollegeLabel">College</InputLabel>
+                  <Select
+                     labelId="CollegeLabel"
+                     fullWidth
+                     value={College}
+                     label="College"
+                     onChange={event => setCollege(event.target.value)}
+                  >
+                     {
+                        DDColleges.map(data => (
+                           <MenuItem
+                              key={data.id}
+                              value={data.collegeName}
+                           >{data.collegeName}</MenuItem>
+                        ))
+                     }
+                  </Select>
+               </FormControl>
+            </Grid>
+         </Grid>
+         <Grid container spacing={3}>
+            <Grid item lg={6} md={6} sm={12} xs={12}>
+               <TextField
+                  variant="outlined"
+                  label="Guardian"
+                  fullWidth
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={Guardian}
+                  onInput={event => setGuardian(event.target.value)}
+               />
+            </Grid>
+            <Grid item lg={6} md={6} sm={12} xs={12}>
+               <TextField
+                  variant="outlined"
+                  label="Guardian Contact"
+                  fullWidth
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={ContactNo}
+                  onInput={event => setContactNo(event.target.value)}
+               />
+            </Grid>
+         </Grid>
+         <Grid container spacing={3}>
+            <Grid item lg={12} md={6} sm={12} xs={12}>
+               <TextField
+                  variant="outlined"
+                  label="Address"
+                  fullWidth
+                  multiline
+                  autoComplete="off"
+                  spellCheck={false}
+                  value={Address}
+                  onInput={event => setAddress(event.target.value)}
+               />
+            </Grid>
+         </Grid>
+         <Grid container spacing={3}>
+            <Grid item container justify="space-between">
+               <Button
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  to="/Admin/UserList">Back</Button>
+               <Button
+                  variant="contained"
+                  style={{ backgroundColor: colors.green['900'], color: 'white' }}>Save Changes</Button>
+            </Grid>
+         </Grid>
+      </div>
+   );
+
    return (
       <div>
          <Card style={{ padding: 20 }}>
             <div style={{ display: 'flex', justifyContent: 'center', marginBottom: 20 }}>
-               <Typography variant="h5">User View Edit</Typography>
+               <Typography variant="h5">User Information</Typography>
             </div>
             <Container>
-               <Grid container spacing={3}>
-                  <Grid item lg={12} md={6} sm={12} xs={12}>
-                     <TextField
-                        variant="outlined"
-                        label="Student ID"
-                        fullWidth
-                        value={StudentID}
-                     />
-                  </Grid>
-               </Grid>
-               <Grid container spacing={3}>
-                  <Grid item lg={4} md={6} sm={12} xs={12}>
-                     <TextField
-                        variant="outlined"
-                        label="FirstName"
-                        fullWidth
-                        autoComplete="off"
-                        spellCheck={false}
-                        value={FirstName}
-                        onInput={event => setFirstName(event.target.value)}
-                     />
-                  </Grid>
-                  <Grid item lg={4} md={6} sm={12} xs={12}>
-                     <TextField
-                        variant="outlined"
-                        label="MiddleName"
-                        fullWidth
-                        autoComplete="off"
-                        spellCheck={false}
-                        value={MiddleName}
-                        onInput={event => setMiddleName(event.target.value)}
-                     />
-                  </Grid>
-                  <Grid item lg={4} md={6} sm={12} xs={12}>
-                     <TextField
-                        variant="outlined"
-                        label="LastName"
-                        fullWidth
-                        autoComplete="off"
-                        spellCheck={false}
-                        value={LastName}
-                        onInput={event => setLastName(event.target.value)}
-                     />
-                  </Grid>
-               </Grid>
-               <Grid container spacing={3}>
-                  <Grid item lg={4} md={6} sm={12} xs={12}>
-                     <FormControl variant="outlined" fullWidth>
-                        <InputLabel id="CourseLabel">Course</InputLabel>
-                        <Select
-                           labelId="CourseLabel"
-                           fullWidth
-                           value={Course}
-                           label="Course"
-                           onChange={event => setCourse(event.target.value)}
-                        >
-                           {
-                              DDCourses.map(data => (
-                                 <MenuItem
-                                    key={data.id}
-                                    value={data.courseName}
-                                 >{data.courseName}</MenuItem>
-                              ))
-                           }
-                        </Select>
-                     </FormControl>
-                  </Grid>
-                  <Grid item lg={8} md={6} sm={12} xs={12}>
-                     <FormControl variant="outlined" fullWidth>
-                        <InputLabel id="CollegeLabel">College</InputLabel>
-                        <Select
-                           labelId="CollegeLabel"
-                           fullWidth
-                           value={College}
-                           label="College"
-                           onChange={event => setCollege(event.target.value)}
-                        >
-                           {
-                              DDColleges.map(data => (
-                                 <MenuItem
-                                    key={data.id}
-                                    value={data.collegeName}
-                                 >{data.collegeName}</MenuItem>
-                              ))
-                           }
-                        </Select>
-                     </FormControl>
-                  </Grid>
-               </Grid>
-               <Grid container spacing={3}>
-                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                     <TextField
-                        variant="outlined"
-                        label="Guardian"
-                        fullWidth
-                        autoComplete="off"
-                        spellCheck={false}
-                        value={Guardian}
-                        onInput={event => setGuardian(event.target.value)}
-                     />
-                  </Grid>
-                  <Grid item lg={6} md={6} sm={12} xs={12}>
-                     <TextField
-                        variant="outlined"
-                        label="Guardian Contact"
-                        fullWidth
-                        autoComplete="off"
-                        spellCheck={false}
-                        value={ContactNo}
-                        onInput={event => setContactNo(event.target.value)}
-                     />
-                  </Grid>
-               </Grid>
-               <Grid container spacing={3}>
-                  <Grid item lg={12} md={6} sm={12} xs={12}>
-                     <TextField
-                        variant="outlined"
-                        label="Address"
-                        fullWidth
-                        multiline
-                        autoComplete="off"
-                        spellCheck={false}
-                        value={Address}
-                        onInput={event => setAddress(event.target.value)}
-                     />
-                  </Grid>
-               </Grid>
-               <Grid container spacing={3}>
-                  <Grid item container justify="space-between">
-                     <Button
-                        variant="contained"
-                        color="primary"
-                        component={Link}
-                        to="/Admin/UserList">Back</Button>
-                     <Button
-                        variant="contained"
-                        style={{ backgroundColor: colors.green['900'], color: 'white' }}>Save Changes</Button>
-                  </Grid>
-               </Grid>
+               {
+                  isLoaded ? Body : <LinearProgress color="secondary" />
+               }
             </Container>
          </Card>
       </div >
