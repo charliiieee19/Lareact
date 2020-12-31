@@ -20,8 +20,13 @@ TopBarProgress.config({
    barThickness: 2
 });
 
+//LandingPage
+const LPMain = LazyLoading(() => import("./components/LandingPage/Main"), { fallback: <TopBarProgress /> });
+const LandingPage = LazyLoading(() => import("./components/LandingPage/LandingPage"), { fallback: <TopBarProgress /> });
 const Login = LazyLoading(() => import("./components/Login"), { fallback: <TopBarProgress /> });
 const NotFound = LazyLoading(() => import("./components/NotFound"), { fallback: <TopBarProgress /> });
+
+//Admin
 const AdminDashboard = LazyLoading(() => import("./components/Admin/Dashboard"), { fallback: <TopBarProgress /> });
 const AdminAbout = LazyLoading(() => import("./components/Admin/About"), { fallback: <TopBarProgress /> });
 const AdminUserList = LazyLoading(() => import("./components/Admin/UserList"), { fallback: <TopBarProgress /> });
@@ -29,7 +34,6 @@ const AdminUserViewEdit = LazyLoading(() => import("./components/Admin/UserViewE
 const AdminMain = LazyLoading(() => import("./components/Admin/Main"), { fallback: <TopBarProgress /> });
 
 const PrivateRoute = ({ children, ...rest }) => {
-   // const [session, setSession] = React.useState([]);
    let session = null;
 
    fetch('/api/SessionCheck')
@@ -38,6 +42,7 @@ const PrivateRoute = ({ children, ...rest }) => {
             console.log(res !== null);
             session = res;
             console.log(session);
+            console.log(res);
          })
          .catch(err => {
             console.log(err);
@@ -60,12 +65,21 @@ const Routes = () => {
          <ThemeProvider theme={theme}>
             <Router>
                <Switch>
-                  <Route exact path="/">
-                     <Login />
-                  </Route>
+                  <Route
+                     exact
+                     path="/"
+                     children={({ match: { path } }) => (
+                        <LPMain>
+                           <Switch>
+                              <Route path="" component={LandingPage} />
+                           </Switch>
+                        </LPMain>
+                     )}
+                  />
+                  <Route path="/Login" component={Login} />
                   <Route
                      path="/Admin"
-                     render={({ match: { path } }) => (
+                     children={({ match: { path } }) => (
                         <AdminMain>
                            <Switch>
                               <Route exact path={`/${path}`} component={AdminDashboard} />

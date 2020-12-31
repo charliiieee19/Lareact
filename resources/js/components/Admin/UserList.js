@@ -4,7 +4,7 @@ import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import {
    Button,
-   CircularProgress,
+   LinearProgress,
    TextField,
    colors
 } from '@material-ui/core';
@@ -19,13 +19,13 @@ const UserList = () => {
    const [userSearch, setUserSearch] = useState("");
 
    const Loading = (
-      <CircularProgress />
+      <LinearProgress color="secondary" style={{ width: '100%' }} />
    );
 
    const columns = [
-      { name: 'StudentID', selector: 'studNo' },
-      { name: 'LastName', selector: 'lname' },
-      { name: 'FirstName', selector: 'fname' },
+      { name: 'StudentID', selector: 'studNo', minWidth: '150px' },
+      { name: 'LastName', selector: 'lname', minWidth: '150px' },
+      { name: 'FirstName', selector: 'fname', minWidth: '200px' },
       { name: 'MiddleName', selector: 'mname' },
       {
          name: 'Action',
@@ -79,29 +79,23 @@ const UserList = () => {
             <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10 }}>
                <TextField variant="outlined" label="Search" type="search" size="small" onInput={event => handleSearch(event)} />
             </div>
-            <div style={{
-               display: 'block',
-               width: '100%',
-               overflowX: 'auto',
-               WebkitOverflowScrolling: 'touch'
-            }}>
-               <DataTable
-                  theme="dark"
-                  title="User Lists"
-                  columns={columns}
-                  data={users.data}
-                  pagination
-                  paginationServer
-                  paginationTotalRows={users.totalRows}
-                  paginationPerPage={countPerPage}
-                  onChangeRowsPerPage={pagerow => setCountPerPage(pagerow)}
-                  paginationRowsPerPageOptions={[10, 25, 50, 100]}
-                  onChangePage={page => setPage(page)}
-                  progressPending={tableLoading}
-                  progressComponent={Loading}
-                  responsive
-               />
-            </div>
+
+            <DataTable
+               theme="dark"
+               title="User Lists"
+               columns={columns}
+               data={users.data}
+               pagination
+               paginationServer
+               paginationTotalRows={users.totalRows}
+               paginationPerPage={countPerPage}
+               onChangeRowsPerPage={pagerow => setCountPerPage(pagerow)}
+               paginationRowsPerPageOptions={[10, 25, 50, 100]}
+               onChangePage={page => setPage(page)}
+               progressPending={tableLoading}
+               progressComponent={Loading}
+               responsive
+            />
          </div>
       </div>
    );

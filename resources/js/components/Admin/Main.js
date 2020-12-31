@@ -16,15 +16,18 @@ const useStyles = makeStyles((theme) => ({
    },
    content: {
       flexGrow: 1,
-      padding: theme.spacing(3)
-   },
+      padding: theme.spacing(3),
+      [theme.breakpoints.up('sm')]: {
+         marginLeft: 250
+      }
+   }
 }));
 
 const Main = ({ children }) => {
    const classes = useStyles();
 
    return (
-      <div className={classes.root}>
+      <div>
          <SideBar />
          <main className={classes.content}>
             <div className={classes.toolbar} />

@@ -1,0 +1,47 @@
+@font-face {
+    font-family: Shelly;
+    src: url("../fonts/Shelley.ttf");
+}
+
+/* body {
+    background: url("../img/bg.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+} */
+
+.LandingPageMainText {
+    background: url("../img/bg.jpg");
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 0;
+    position: relative;
+    color: white;
+    width: 100%;
+    padding: 300px 0px;
+    text-align: center;
+    white-space: pre-line;
+}
+
+.LandingPageMainText small {
+    color: white;
+    width: 100%;
+    text-align: center;
+    font-family: Nunito;
+    font-size: 20px;
+    margin-top: 0;
+    padding: 0;
+}
+
+.LandingPageSubText {
+    color: white;
+    width: 100%;
+    padding: 300px 0px;
+    text-align: center;
+}

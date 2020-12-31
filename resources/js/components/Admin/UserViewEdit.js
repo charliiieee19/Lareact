@@ -34,7 +34,6 @@ const UserViewEdit = () => {
    const DropdownData = () => {
       axios.get('/api/UserInfoDropdown')
          .then(res => {
-            console.log(res.data);
             setDDCourses(res.data.Courses);
             setDDColleges(res.data.Colleges);
 
