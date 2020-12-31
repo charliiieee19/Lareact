@@ -23,6 +23,7 @@ TopBarProgress.config({
 //LandingPage
 const LPMain = LazyLoading(() => import("./components/LandingPage/Main"), { fallback: <TopBarProgress /> });
 const LandingPage = LazyLoading(() => import("./components/LandingPage/LandingPage"), { fallback: <TopBarProgress /> });
+const LPGallery = LazyLoading(() => import("./components/LandingPage/Gallery"), { fallback: <TopBarProgress /> });
 const Login = LazyLoading(() => import("./components/Login"), { fallback: <TopBarProgress /> });
 const NotFound = LazyLoading(() => import("./components/NotFound"), { fallback: <TopBarProgress /> });
 
@@ -65,13 +66,20 @@ const Routes = () => {
          <ThemeProvider theme={theme}>
             <Router>
                <Switch>
+                  <Route exact path="/">
+                     <LPMain>
+                        <LandingPage />
+                        {console.log("asdasd")}
+                     </LPMain>
+                  </Route>s
                   <Route
-                     exact
-                     path="/"
+                     path="/Home"
                      children={({ match: { path } }) => (
                         <LPMain>
+                           {console.log(path)}
                            <Switch>
-                              <Route path="" component={LandingPage} />
+                              <Route exact path="/" component={LandingPage} />
+                              <Route path={`${path}/Gallery`} component={LPGallery} />
                            </Switch>
                         </LPMain>
                      )}

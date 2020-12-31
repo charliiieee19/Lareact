@@ -158,11 +158,24 @@ const Login = () => {
                            }
                         </Grid>
                         <Grid item lg={12}>
-                           <Button variant="contained" color="primary" fullWidth onClick={Login}>
+                           <Button
+                              variant="contained"
+                              color="primary"
+                              fullWidth
+                              onClick={Login}
+                           >
                               {
                                  loading ? <CircularProgress size={24} color="inherit" /> : 'Login'
                               }
                            </Button>
+                           <Button
+                              variant="text"
+                              color="primary"
+                              fullWidth
+                              style={{ marginTop: 10 }}
+                              component={Link}
+                              to="/"
+                           >Back</Button>
                         </Grid>
                      </Grid>
                   </CardContent>
