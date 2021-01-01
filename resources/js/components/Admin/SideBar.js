@@ -80,6 +80,7 @@ const SideBar = (props) => {
    const handleLogout = () => {
       axios.get('/api/Logout')
          .then(res => {
+            localStorage.removeItem('userLogin');
             history.push('/Login');
          }).catch(error => {
             alert(error);

@@ -6,6 +6,7 @@ import LazyLoading from "./LazyLoading";
 import TopBarProgress from "react-topbar-progress-indicator";
 import { createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
+import axios from 'axios';
 
 const theme = createMuiTheme({
    palette: {
@@ -38,27 +39,73 @@ const AdminUserList = LazyLoading(() => import("./components/Admin/UserList"), {
 const AdminUserViewEdit = LazyLoading(() => import("./components/Admin/UserViewEdit"), { fallback: <TopBarProgress /> });
 const AdminMain = LazyLoading(() => import("./components/Admin/Main"), { fallback: <TopBarProgress /> });
 
-const PrivateRoute = ({ children, ...rest }) => {
-   let session = null;
+const PrivateRoute = ({ children: Children, ...rest }) => {
+   let session = false;
 
    if (localStorage.getItem('userLogin') !== null) {
-      session = localStorage.getItem('userLogin');
+      session = true;
+
+      axios.get('/api/SessionCheck')
+         .then(res => {
+            console.log(res.data === null);
+            if (res.data === null) {
+               console.log("fake");
+               session = false;
+            } else {
+               session = true;
+            }
+         }).catch(err => {
+            alert(err);
+         });
    }
 
    return (
       <Route {...rest}
-         render={() => {
-            return session !== null
-               ? children
+         render={routeProps => {
+            return session
+               ? <Children {...routeProps} />
                : <Redirect to="/Login" />
          }}
       />
    )
 }
 
+const LoginRoute = ({ children: Children, ...rest }) => {
+   let session = false;
+
+   if (localStorage.getItem('userLogin') !== null) {
+      session = true;
+
+      axios.get('/api/SessionCheck')
+         .then(res => {
+            console.log(res.data === null);
+            if (res.data === null) {
+               console.log("fake");
+               session = false;
+            } else {
+               session = true;
+            }
+         }).catch(err => {
+            alert(err);
+         });
+   }
+
+   return (
+      <Route {...rest}
+         render={routeProps => {
+            return !session
+               ? <Children {...routeProps} />
+               : <Redirect to="/Admin" />
+         }}
+      />
+   )
+}
+
+
 const Routes = () => {
    return (
       <div>
+         {console.log(navigator)}
          <ThemeProvider theme={theme}>
             <Router>
                <Switch>
@@ -66,7 +113,7 @@ const Routes = () => {
                      <LPMain>
                         <LandingPage />
                      </LPMain>
-                  </Route>s
+                  </Route>
                   <Route
                      path="/Home"
                      children={({ match: { path } }) => (
@@ -84,17 +131,17 @@ const Routes = () => {
                         </LPMain>
                      )}
                   />
-                  <Route path="/Login" component={Login} />
-                  <Route
+                  <LoginRoute path="/Login" children={Login} />
+                  <PrivateRoute
                      path="/Admin"
                      children={({ match: { path } }) => (
                         <AdminMain>
                            <Switch>
-                              <Route exact path={`/${path}`} component={AdminDashboard} />
-                              <Route path={`${path}/Dashboard`} component={AdminDashboard} />
-                              <Route path={`${path}/About`} component={AdminAbout} />
-                              <Route path={`${path}/UserList`} component={AdminUserList} />
-                              <Route path={`${path}/UserViewEdit/:id`} component={AdminUserViewEdit} />
+                              <PrivateRoute exact path={`${path}`} children={AdminDashboard} />
+                              <PrivateRoute path={`${path}/Dashboard`} children={AdminDashboard} />
+                              <PrivateRoute path={`${path}/About`} children={AdminAbout} />
+                              <PrivateRoute path={`${path}/UserList`} children={AdminUserList} />
+                              <PrivateRoute path={`${path}/UserViewEdit/:id`} children={AdminUserViewEdit} />
                               <Redirect from={`${path}/*`} to="/*" />
                            </Switch>
                         </AdminMain>

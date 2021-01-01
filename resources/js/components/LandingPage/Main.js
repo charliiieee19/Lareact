@@ -5,7 +5,7 @@ import {
    Typography,
    Button,
    Hidden,
-   Drawer,
+   SwipeableDrawer,
    List,
    ListItem,
    ListItemText,
@@ -83,16 +83,17 @@ const Main = ({ children }) => {
                   {Menus}
                </Hidden>
                <Hidden mdUp>
-                  <Drawer
+                  <SwipeableDrawer
                      open={mobileOpen}
                      onClose={handleOpenDrawer}
+                     onOpen={handleOpenDrawer}
                      classes={{
                         paper: classes.drawerPaper
                      }}
                      anchor="right"
                   >
                      {MenusMobile}
-                  </Drawer>
+                  </SwipeableDrawer>
                </Hidden>
                <Hidden mdUp>
                   <div style={{ flexGrow: 1 }} />

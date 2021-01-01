@@ -13,17 +13,17 @@
     padding: 0;
 } */
 
-.LandingPageMainText {
+/* .LandingPageMainText {
     background: url("../img/bg.jpg");
     background-position: center center;
     background-repeat: no-repeat;
     background-attachment: fixed;
     background-size: cover;
+    height: 100%;
     margin: 0;
     padding: 0;
     position: relative;
     color: white;
-    width: 100%;
     padding: 300px 0px;
     text-align: center;
     white-space: pre-line;
@@ -44,4 +44,25 @@
     width: 100%;
     padding: 300px 0px;
     text-align: center;
+} */
+
+.BGImage {
+    background-image: url("../img/bg.jpg");
+    position: fixed;
+    top: 0;
+    left: 0;
+    background-position: center center;
+    background-repeat: no-repeat;
+    background-attachment: fixed;
+    background-size: cover;
+    /* Preserve aspet ratio */
+    min-width: 100%;
+    min-height: 100%;
+}
+
+.header {
+    color: white;
+    padding: 40vh 0px;
+    text-align: center;
+    white-space: pre-line;
 }
