@@ -24,6 +24,10 @@ TopBarProgress.config({
 const LPMain = LazyLoading(() => import("./components/LandingPage/Main"), { fallback: <TopBarProgress /> });
 const LandingPage = LazyLoading(() => import("./components/LandingPage/LandingPage"), { fallback: <TopBarProgress /> });
 const LPGallery = LazyLoading(() => import("./components/LandingPage/Gallery"), { fallback: <TopBarProgress /> });
+const LPContact = LazyLoading(() => import("./components/LandingPage/Contact"), { fallback: <TopBarProgress /> });
+const LPAbout = LazyLoading(() => import("./components/LandingPage/About"), { fallback: <TopBarProgress /> });
+const LPFilmShowing = LazyLoading(() => import("./components/LandingPage/FilmShowing"), { fallback: <TopBarProgress /> });
+const LPSchedules = LazyLoading(() => import("./components/LandingPage/Schedules"), { fallback: <TopBarProgress /> });
 const Login = LazyLoading(() => import("./components/Login"), { fallback: <TopBarProgress /> });
 const NotFound = LazyLoading(() => import("./components/NotFound"), { fallback: <TopBarProgress /> });
 
@@ -37,24 +41,16 @@ const AdminMain = LazyLoading(() => import("./components/Admin/Main"), { fallbac
 const PrivateRoute = ({ children, ...rest }) => {
    let session = null;
 
-   fetch('/api/SessionCheck')
-      .then(res => res.json()
-         .then(res => {
-            console.log(res !== null);
-            session = res;
-            console.log(session);
-            console.log(res);
-         })
-         .catch(err => {
-            console.log(err);
-         }));
+   if (localStorage.getItem('userLogin') !== null) {
+      session = localStorage.getItem('userLogin');
+   }
 
    return (
       <Route {...rest}
          render={() => {
             return session !== null
                ? children
-               : <Redirect to="/" />
+               : <Redirect to="/Login" />
          }}
       />
    )
@@ -69,7 +65,6 @@ const Routes = () => {
                   <Route exact path="/">
                      <LPMain>
                         <LandingPage />
-                        {console.log("asdasd")}
                      </LPMain>
                   </Route>s
                   <Route
@@ -80,6 +75,11 @@ const Routes = () => {
                            <Switch>
                               <Route exact path="/" component={LandingPage} />
                               <Route path={`${path}/Gallery`} component={LPGallery} />
+                              <Route path={`${path}/Contact`} component={LPContact} />
+                              <Route path={`${path}/About`} component={LPAbout} />
+                              <Route path={`${path}/FilmShowing`} component={LPFilmShowing} />
+                              <Route path={`${path}/Schedules`} component={LPSchedules} />
+                              <Redirect from={`${path}/*`} to="/*" />
                            </Switch>
                         </LPMain>
                      )}

@@ -40,9 +40,21 @@ const Main = ({ children }) => {
             <ListItem button component={Link} to="/Home/Gallery" onClick={() => setMobileOpen(false)}>
                <ListItemText primary="Gallery" />
             </ListItem>
+            <ListItem button component={Link} to="/Home/FilmShowing" onClick={() => setMobileOpen(false)}>
+               <ListItemText primary="Film Showing" />
+            </ListItem>
+            <ListItem button component={Link} to="/Home/Contact" onClick={() => setMobileOpen(false)}>
+               <ListItemText primary="Contact" />
+            </ListItem>
+            <ListItem button component={Link} to="/Home/About" onClick={() => setMobileOpen(false)}>
+               <ListItemText primary="About" />
+            </ListItem>
          </List>
          <Divider />
          <List>
+            <ListItem button component={Link} to="/Home/Schedules" onClick={() => setMobileOpen(false)}>
+               <ListItemText primary="Schedules" />
+            </ListItem>
             <ListItem button component={Link} to="/Login" onClick={() => setMobileOpen(false)}>
                <ListItemText primary="Login" />
             </ListItem>
@@ -53,11 +65,11 @@ const Main = ({ children }) => {
    const Menus = (
       <React.Fragment>
          <Button color="inherit" component={Link} to="/Home/Gallery">Gallery</Button>
-         <Button color="inherit">Film Showing</Button>
-         <Button color="inherit">Contact</Button>
-         <Button color="inherit">About</Button>
+         <Button color="inherit" component={Link} to="/Home/FilmShowing">Film Showing</Button>
+         <Button color="inherit" component={Link} to="/Home/Contact">Contact</Button>
+         <Button color="inherit" component={Link} to="/Home/About">About</Button>
          <div style={{ flexGrow: 1 }} />
-         <Button color="inherit">Schedules</Button>
+         <Button color="inherit" component={Link} to="/Home/Schedules">Schedules</Button>
          <Button color="inherit" component={Link} to="/Login">Login</Button>
       </React.Fragment>
    );

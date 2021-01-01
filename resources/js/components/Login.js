@@ -15,6 +15,7 @@ import { Alert } from '@material-ui/lab';
 import { Link, useHistory, Redirect } from 'react-router-dom';
 import $ from 'jquery';
 import axios from 'axios';
+import { random } from 'lodash';
 
 const Login = () => {
    const [usernameError, setUsernameError] = useState(false);
@@ -96,6 +97,7 @@ const Login = () => {
             "Password": Password,
          }).then(res => {
             if (res.data[0].Message === "1") {
+               localStorage.setItem('userLogin', res.data[0]);
                history.push('/Admin/Dashboard');
             } else {
                setAlertMessage(res.data[0].Message);

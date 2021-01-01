@@ -14,22 +14,18 @@ const style = makeStyles(() => ({
    }
 }));
 
-const Contact = () => {
+const Schedules = () => {
    const classes = style();
 
    return (
       <div style={{ marginTop: 100, color: 'white' }}>
          <div className={classes.center}>
             <div>
-               <Typography variant="h4">Contact Us:</Typography>
-               <br />
-               <Typography variant="h6">Email: audiovisual@neu.edu.ph</Typography>
-               <br />
-               <Typography variant="h6">Tel: 981-4221</Typography>
+               <Typography variant="h4">Schedules</Typography>
             </div>
          </div>
       </div>
    );
 }
 
-export default Contact;
+export default Schedules;
