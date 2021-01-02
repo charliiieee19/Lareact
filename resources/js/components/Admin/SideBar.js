@@ -2,6 +2,7 @@ import React from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
+import SwipeableDrawer from '@material-ui/core/SwipeableDrawer';
 import Drawer from '@material-ui/core/Drawer';
 import Hidden from '@material-ui/core/Hidden';
 import IconButton from '@material-ui/core/IconButton';
@@ -15,7 +16,11 @@ import {
    DashboardRounded,
    ExpandLessRounded,
    ExpandMoreRounded,
-   SettingsRounded
+   SettingsRounded,
+   DoneAllRounded,
+   AssignmentRounded,
+   QueryBuilderRounded,
+   NotInterestedRounded
 } from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -58,6 +63,9 @@ const useStyles = makeStyles((theme) => ({
    },
    ListItems: {
       padding: '10px 8px'
+   },
+   subList: {
+      paddingLeft: theme.spacing(4)
    }
 }));
 
@@ -72,10 +80,6 @@ const SideBar = (props) => {
    const handleDrawerToggle = () => {
       setMobileOpen(!mobileOpen);
    };
-
-   const handleListOpen = () => {
-      setListOpen(!listOpen);
-   }
 
    const handleLogout = () => {
       axios.get('/api/Logout')
@@ -102,25 +106,35 @@ const SideBar = (props) => {
                </ListItemIcon>
                <ListItemText primary="Dashboard" />
             </ListItem>
-            <ListItem button onClick={handleListOpen}>
+            <ListItem button component={Link} to="/Admin/Requests" onClick={() => setMobileOpen(false)}>
                <ListItemIcon>
-                  <SettingsRounded />
+                  <AssignmentRounded />
                </ListItemIcon>
-               <ListItemText primary="Manage" />
-               {listOpen ? <ExpandLessRounded /> : <ExpandMoreRounded />}
+               <ListItemText primary="Requests" />
+               {/* {listOpen ? <ExpandMoreRounded /> : <ExpandLessRounded />} */}
             </ListItem>
-            <Collapse in={listOpen} timeout="auto" unmountOnExit>
-               <List disablePadding>
-                  <ListItem button style={{ paddingLeft: theme.spacing(4) }} component={Link} to="/Admin/About" onClick={() => setMobileOpen(false)}>
-                     <ListItemText primary="Today Schedules" />
+            {/* <Collapse in={listOpen} unmountOnExit>
+               <List component="div" disablePadding>
+                  <ListItem button className={classes.subList}>
+                     <ListItemIcon>
+                        <DoneAllRounded />
+                     </ListItemIcon>
+                     <ListItemText primary="Approved" />
+                  </ListItem>
+                  <ListItem button className={classes.subList}>
+                     <ListItemIcon>
+                        <QueryBuilderRounded />
+                     </ListItemIcon>
+                     <ListItemText primary="Pending" />
+                  </ListItem>
+                  <ListItem button className={classes.subList}>
+                     <ListItemIcon>
+                        <NotInterestedRounded />
+                     </ListItemIcon>
+                     <ListItemText primary="Disapproved" />
                   </ListItem>
                </List>
-               <List disablePadding>
-                  <ListItem button style={{ paddingLeft: theme.spacing(4) }} component={Link} to="/Admin/UserList" onClick={() => setMobileOpen(false)}>
-                     <ListItemText primary="UserLists" />
-                  </ListItem>
-               </List>
-            </Collapse>
+            </Collapse> */}
          </List>
          <Divider />
          <List>
@@ -158,11 +172,12 @@ const SideBar = (props) => {
          <nav className={classes.drawer}>
             {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
             <Hidden smUp implementation="css">
-               <Drawer
+               <SwipeableDrawer
                   container={container}
                   variant="temporary"
                   anchor={theme.direction === 'rtl' ? 'right' : 'left'}
                   open={mobileOpen}
+                  onOpen={() => setMobileOpen(!mobileOpen)}
                   onClose={handleDrawerToggle}
                   classes={{
                      paper: classes.drawerPaper,
@@ -172,7 +187,7 @@ const SideBar = (props) => {
                   }}
                >
                   {drawer}
-               </Drawer>
+               </SwipeableDrawer>
             </Hidden>
             <Hidden xsDown implementation="css">
                <Drawer

@@ -96,9 +96,15 @@ const Login = () => {
             "Username": Username,
             "Password": Password,
          }).then(res => {
+            console.log(res.data);
             if (res.data[0].Message === "1") {
-               localStorage.setItem('userLogin', res.data[0]);
-               history.push('/Admin/Dashboard');
+               localStorage.setItem('userLogin', JSON.stringify(res.data[0]));
+
+               if (res.data[0].type === "Admin") {
+                  history.push('/Admin/Dashboard');
+               } else {
+                  history.push('/Student/Dashboard');
+               }
             } else {
                setAlertMessage(res.data[0].Message);
                setLoginAlert(true);
@@ -131,6 +137,7 @@ const Login = () => {
                               autoComplete="off"
                               spellCheck="false"
                               onKeyDown={handleKeyDown}
+                              autoFocus
                            />
                         </Grid>
                         <Grid item lg={12} style={{ marginBottom: '15px' }}>

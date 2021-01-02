@@ -1,5 +1,5 @@
 import React from 'react';
-import { AppBar, Typography, Toolbar, Container, Card, CardContent, Grid, Box, Avatar, Button, colors } from '@material-ui/core';
+import { AppBar, Typography, Toolbar, Container, Card, CardContent, Grid, Box, Avatar, Button, colors, TextField } from '@material-ui/core';
 import { ListAltRounded } from '@material-ui/icons';
 
 const Dashboard = () => {
@@ -19,7 +19,7 @@ const Dashboard = () => {
                            gutterBottom
                            variant="h6"
                         >
-                           Today <br /> Schedules
+                           Approved <br /> Requests
                               </Typography>
                         <Typography
                            color="textPrimary"
@@ -87,7 +87,7 @@ const Dashboard = () => {
                            gutterBottom
                            variant="h6"
                         >
-                           Approved <br /> Requests
+                           Dispproved <br /> Requests
                               </Typography>
                         <Typography
                            color="textPrimary"
