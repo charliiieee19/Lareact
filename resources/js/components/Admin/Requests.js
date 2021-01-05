@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import {
    AppBar,
    Typography,
@@ -20,6 +20,7 @@ import {
    makeStyles
 } from '@material-ui/core';
 import DataTable from 'react-data-table-component';
+import axios from 'axios';
 
 const style = makeStyles((theme) => ({
    card: {
@@ -37,12 +38,28 @@ const style = makeStyles((theme) => ({
    }
 }));
 
+
+
 const Requests = () => {
    const classes = style();
+   const [DDroom, setDDRoom] = useState([]);
    const [startDate, setStartDate] = useState(new Date().toISOString().split('T')[0]);
    const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
    const [room, setRoom] = useState("All");
    const [type, setType] = useState("Approved");
+
+   const DropdownData = () => {
+      axios.get('/api/RequestsDropdown')
+         .then(res => {
+            setDDRoom(res.data.Rooms);
+         }).catch(err => {
+            alert(err);
+         });
+   }
+
+   useEffect(() => {
+      DropdownData();
+   }, []);
 
    const columns = [
       { name: 'lastName', selector: 'lastName', sortable: true },
@@ -129,19 +146,20 @@ const Requests = () => {
                </Grid>
                <Grid item xl={2} lg={3} md={6} sm={12} xs={12}>
                   <FormControl variant="outlined" fullWidth>
-                     <InputLabel id="TypeLabel">Type</InputLabel>
+                     <InputLabel id="RoomLabel">Room</InputLabel>
                      <Select
-                        labelId="TypeLabel"
+                        labelId="RoomLabel"
                         id="Type"
                         value={room}
                         onChange={(event) => setRoom(event.target.value)}
-                        label="Type"
+                        label="Room"
                      >
                         <MenuItem value="All">All</MenuItem>
-                        <MenuItem value="A">A</MenuItem>
-                        <MenuItem value="B">B</MenuItem>
-                        <MenuItem value="C">C</MenuItem>
-                        <MenuItem value="D">D</MenuItem>
+                        {
+                           DDroom.map(data => (
+                              <MenuItem key={data.id} value={data.roomName}>{data.roomName}</MenuItem>
+                           ))
+                        }
                      </Select>
                   </FormControl>
                </Grid>

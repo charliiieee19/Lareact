@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import '../css/app.css';
@@ -44,26 +44,28 @@ const AdminRequests = LazyLoading(() => import("./components/Admin/Requests"), {
 const PrivateRoute = ({ children: Children, ...rest }) => {
    let session = false;
 
+   axios.get('/api/SessionCheck')
+      .then(res => {
+         if (res.data === false) {
+            localStorage.removeItem('userLogin');
+            session = false;
+         } else {
+            localStorage.setItem('userLogin', res.data[0].type);
+            session = true;
+         }
+      }).catch(err => {
+         alert(err);
+      });
+
    if (localStorage.getItem('userLogin') !== null) {
       session = true;
-
-      axios.get('/api/SessionCheck')
-         .then(res => {
-            if (res.data === null) {
-               session = false;
-            } else {
-               session = true;
-            }
-         }).catch(err => {
-            alert(err);
-         });
    }
 
    return (
       <Route {...rest}
-         render={routeProps => {
+         render={props => {
             return session
-               ? <Children {...routeProps} />
+               ? <Children {...props} />
                : <Redirect to="/Login" />
          }}
       />
@@ -74,22 +76,25 @@ const LoginRoute = ({ children: Children, ...rest }) => {
    let session = false;
    let type = "";
 
+   axios.get('/api/SessionCheck')
+      .then(res => {
+         if (res.data === false) {
+            localStorage.removeItem('userLogin');
+            session = false;
+         } else {
+            localStorage.setItem('userLogin', res.data[0].type);
+            type = JSON.stringify(res.data[0].type);
+            session = true;
+         }
+      }).catch(err => {
+         alert(err);
+      });
+
    if (localStorage.getItem('userLogin') !== null) {
       session = true;
-      type = JSON.parse(localStorage.getItem('userLogin')).type;
-
-      axios.get('/api/SessionCheck')
-         .then(res => {
-            console.log(res.data === null);
-            if (res.data === null) {
-               console.log("fake");
-               session = false;
-            } else {
-               session = true;
-            }
-         }).catch(err => {
-            alert(err);
-         });
+      type = localStorage.getItem('userLogin');
+   } else {
+      type = "Login";
    }
 
    return (
@@ -115,61 +120,76 @@ const Routes = () => {
       //    console.log(res);
       // });
    });
+   // const [session, setSession] = useState([]);
+
+   // const CheckSession = () => {
+   //    axios.get('/api/SessionCheck')
+   //       .then(res => {
+   //          console.log(res);
+   //          setSession(res.data);
+   //       }).catch(err => {
+   //          alert(err);
+   //       });
+   // }
+
+   // useEffect(() => {
+   //    CheckSession();
+   // }, [session]);
 
    return (
       <div>
          {console.log(navigator)}
          <ThemeProvider theme={theme}>
-               <Router>
-                  <Switch>
-                     <Route exact path="/">
+            <Router>
+               <Switch>
+                  <Route exact path="/">
+                     <LPMain>
+                        <LandingPage />
+                     </LPMain>
+                  </Route>
+                  <Route
+                     path="/Home"
+                     children={({ match: { path } }) => (
                         <LPMain>
-                           <LandingPage />
+                           {console.log(path)}
+                           <Switch>
+                              <Route exact path="/" component={LandingPage} />
+                              <Route path={`${path}/Gallery`} component={LPGallery} />
+                              <Route path={`${path}/Contact`} component={LPContact} />
+                              <Route path={`${path}/About`} component={LPAbout} />
+                              <Route path={`${path}/FilmShowing`} component={LPFilmShowing} />
+                              <Route path={`${path}/Schedules`} component={LPSchedules} />
+                              <Redirect from={`${path}/*`} to="/*" />
+                           </Switch>
                         </LPMain>
-                     </Route>
-                     <Route
-                        path="/Home"
-                        children={({ match: { path } }) => (
-                           <LPMain>
-                              {console.log(path)}
-                              <Switch>
-                                 <Route exact path="/" component={LandingPage} />
-                                 <Route path={`${path}/Gallery`} component={LPGallery} />
-                                 <Route path={`${path}/Contact`} component={LPContact} />
-                                 <Route path={`${path}/About`} component={LPAbout} />
-                                 <Route path={`${path}/FilmShowing`} component={LPFilmShowing} />
-                                 <Route path={`${path}/Schedules`} component={LPSchedules} />
-                                 <Redirect from={`${path}/*`} to="/*" />
-                              </Switch>
-                           </LPMain>
-                        )}
-                     />
-                     <LoginRoute path="/Login" children={Login} />
-                     <PrivateRoute
-                        path="/Admin"
-                        children={({ match: { path } }) => (
-                           <AdminMain>
-                              <Switch>
-                                 <PrivateRoute exact path={`${path}`} children={AdminDashboard} />
-                                 <PrivateRoute path={`${path}/Dashboard`} children={AdminDashboard} />
-                                 <PrivateRoute path={`${path}/About`} children={AdminAbout} />
-                                 <PrivateRoute path={`${path}/UserList`} children={AdminUserList} />
-                                 <PrivateRoute path={`${path}/Requests`} children={AdminRequests} />
-                                 <PrivateRoute path={`${path}/UserViewEdit/:id`} children={AdminUserViewEdit} />
-                                 <Redirect from={`${path}/*`} to="/*" />
-                              </Switch>
-                           </AdminMain>
-                        )}
-                     />
-                     <Route path="/Visits">
-                        <Visits />
-                     </Route>
-                     <Route path="*">
-                        <NotFound />
-                     </Route>
+                     )}
+                  />
+                  <LoginRoute path="/Login" children={Login} />
+                  <PrivateRoute
+                     path="/Admin"
+                     children={({ match: { path } }) => (
+                        <AdminMain>
+                           <Switch>
+                              <PrivateRoute exact path={`${path}`} children={AdminDashboard} />
+                              <PrivateRoute path={`${path}/Dashboard`} children={AdminDashboard} />
+                              <PrivateRoute path={`${path}/About`} children={AdminAbout} />
+                              <PrivateRoute path={`${path}/UserList`} children={AdminUserList} />
+                              <PrivateRoute path={`${path}/Requests`} children={AdminRequests} />
+                              <PrivateRoute path={`${path}/UserViewEdit/:id`} children={AdminUserViewEdit} />
+                              <Redirect from={`${path}/*`} to="/*" />
+                           </Switch>
+                        </AdminMain>
+                     )}
+                  />
+                  <Route path="/Visits">
+                     <Visits />
+                  </Route>
+                  <Route path="*">
+                     <NotFound />
+                  </Route>
 
-                  </Switch>
-               </Router>
+               </Switch>
+            </Router>
          </ThemeProvider>
       </div>
    );

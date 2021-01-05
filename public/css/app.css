@@ -4,3 +4,38 @@
  * Copyright 2011-2020 Twitter, Inc.
  * Licensed under MIT (https://github.com/twbs/bootstrap/blob/main/LICENSE)
  */
+
+var map = {
+	"./A1.jpg": "./resources/img/A1.jpg",
+	"./A2.jpg": "./resources/img/A2.jpg",
+	"./A3.jpg": "./resources/img/A3.jpg",
+	"./B1.jpg": "./resources/img/B1.jpg",
+	"./B2.jpg": "./resources/img/B2.jpg",
+	"./B3.jpg": "./resources/img/B3.jpg",
+	"./B4.jpg": "./resources/img/B4.jpg",
+	"./C1.jpg": "./resources/img/C1.jpg",
+	"./C2.jpg": "./resources/img/C2.jpg",
+	"./C3.jpg": "./resources/img/C3.jpg",
+	"./C4.jpg": "./resources/img/C4.jpg",
+	"./bg.jpg": "./resources/img/bg.jpg"
+};
+
+
+function webpackContext(req) {
+	var id = webpackContextResolve(req);
+	return __webpack_require__(id);
+}
+function webpackContextResolve(req) {
+	if(!__webpack_require__.o(map, req)) {
+		var e = new Error("Cannot find module '" + req + "'");
+		e.code = 'MODULE_NOT_FOUND';
+		throw e;
+	}
+	return map[req];
+}
+webpackContext.keys = function webpackContextKeys() {
+	return Object.keys(map);
+};
+webpackContext.resolve = webpackContextResolve;
+module.exports = webpackContext;
+webpackContext.id = "./resources/img sync recursive ^\\.\\/.*\\.jpg$";

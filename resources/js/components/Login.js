@@ -15,7 +15,6 @@ import { Alert } from '@material-ui/lab';
 import { Link, useHistory, Redirect } from 'react-router-dom';
 import $ from 'jquery';
 import axios from 'axios';
-import { random } from 'lodash';
 
 const Login = () => {
    const [usernameError, setUsernameError] = useState(false);
@@ -118,7 +117,7 @@ const Login = () => {
    }
 
    return (
-      <div style={{ marginTop: '200px' }}>
+      <div style={{marginTop: '20vh'}}>
          <Grid container direction="row" justify="center">
             <Grid item xl={3} lg={4} md={6} sm={11} xs={11}>
                <Card>

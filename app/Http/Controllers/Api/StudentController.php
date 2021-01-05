@@ -29,7 +29,14 @@ class StudentController extends Controller
 
    public function SessionCheck()
    {
-      return json_encode(session('isLoggedIn'));
+
+      if (session('isLoggedIn')) {
+         $res = session('isLoggedIn');
+      } else {
+         $res = false;
+      }
+
+      return json_encode($res);
    }
 
    public function UserList()
@@ -101,6 +108,17 @@ class StudentController extends Controller
       $res = array(
          'Courses' => $qCourses,
          'Colleges' => $qColleges
+      );
+
+      return json_encode($res);
+   }
+
+   public function RequestsDropdown()
+   {
+      $qRooms = DB::select('SELECT * FROM rooms');
+
+      $res = array(
+         'Rooms' => $qRooms
       );
 
       return json_encode($res);
