@@ -20,13 +20,13 @@ const Dashboard = () => {
                            variant="h6"
                         >
                            Approved <br /> Requests
-                              </Typography>
+                        </Typography>
                         <Typography
                            color="textPrimary"
                            variant="h5"
                         >
                            99999
-                              </Typography>
+                        </Typography>
                      </Grid>
                      <Grid item>
                         <Avatar
@@ -64,7 +64,7 @@ const Dashboard = () => {
                      </Grid>
                      <Grid item>
                         <Avatar
-                           style={{ height: 56, width: 56 }}
+                           style={{ height: 56, width: 56, backgroundColor: colors.blue[900], color: colors.amber[50] }}
                         >
                            <ListAltRounded />
                         </Avatar>
@@ -98,7 +98,7 @@ const Dashboard = () => {
                      </Grid>
                      <Grid item>
                         <Avatar
-                           style={{ height: 56, width: 56 }}
+                           style={{ height: 56, width: 56, backgroundColor: colors.blue[900], color: colors.amber[50] }}
                         >
                            <ListAltRounded />
                         </Avatar>
@@ -128,11 +128,11 @@ const Dashboard = () => {
                            variant="h5"
                         >
                            99999
-                              </Typography>
+                        </Typography>
                      </Grid>
                      <Grid item>
                         <Avatar
-                           style={{ height: 56, width: 56 }}
+                           style={{ height: 56, width: 56, backgroundColor: colors.blue[900], color: colors.amber[50] }}
                         >
                            <ListAltRounded />
                         </Avatar>

@@ -47,6 +47,7 @@ const Requests = () => {
    const [endDate, setEndDate] = useState(new Date().toISOString().split('T')[0]);
    const [room, setRoom] = useState("All");
    const [type, setType] = useState("Approved");
+   const [rows, setRows] = useState([]);
 
    const DropdownData = () => {
       axios.get('/api/RequestsDropdown')
@@ -57,55 +58,38 @@ const Requests = () => {
          });
    }
 
+   const GetData = () => {
+
+   }
+
    useEffect(() => {
       DropdownData();
    }, []);
 
    const columns = [
-      { name: 'lastName', selector: 'lastName', sortable: true },
-      { name: 'firstName', selector: 'firstName', sortable: true },
-      { name: 'age', selector: 'age', sortable: true },
-      // {
-      //    name: 'Action',
-      //    minWidth: '250px',
-      //    cell: row => (
-      //       <div>
-      //          <Button variant="contained" size="small" color="primary" onClick={() => ViewEdit(`${row.SQNC}`)}>View / Edit</Button>
-      //          <Button
-      //             variant="contained"
-      //             size="small"
-      //             style={{
-      //                backgroundColor: colors.red[700],
-      //                color: 'white',
-      //                marginLeft: 5
-      //             }}
-      //          >
-      //             Delete
-      //          </Button>
-      //       </div>
-      //    )
-      // },
-   ];
-
-   const rows = [
-      { id: 1, lastName: 'Snow', firstName: 'Jon', age: 35 },
-      { id: 2, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-      { id: 3, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-      { id: 4, lastName: 'Stark', firstName: 'Arya', age: 16 },
-      { id: 5, lastName: 'Targaryen', firstName: 'Daenerys', age: 11 },
-      { id: 6, lastName: 'Melisandre', firstName: 11, age: 150 },
-      { id: 7, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-      { id: 8, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-      { id: 9, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
-      { id: 11, lastName: 'Snow', firstName: 'Jon', age: 35 },
-      { id: 12, lastName: 'Lannister', firstName: 'Cersei', age: 42 },
-      { id: 13, lastName: 'Lannister', firstName: 'Jaime', age: 45 },
-      { id: 14, lastName: 'Stark', firstName: 'Arya', age: 16 },
-      { id: 15, lastName: 'Targaryen', firstName: 'Daenerys', age: 11 },
-      { id: 16, lastName: 'Melisandre', firstName: 11, age: 150 },
-      { id: 17, lastName: 'Clifford', firstName: 'Ferrara', age: 44 },
-      { id: 18, lastName: 'Frances', firstName: 'Rossini', age: 36 },
-      { id: 19, lastName: 'Roxie', firstName: 'Harvey', age: 65 },
+      { name: 'Date', selector: 'lastName', sortable: true },
+      { name: 'Room', selector: 'firstName', sortable: true },
+      { name: 'Requester', selector: 'age', sortable: true },
+      {
+         name: 'Action',
+         minWidth: '250px',
+         cell: row => (
+            <div>
+               <Button variant="contained" size="small" color="primary" onClick={() => ViewEdit(`${row.SQNC}`)}>View / Edit</Button>
+               <Button
+                  variant="contained"
+                  size="small"
+                  style={{
+                     backgroundColor: colors.red[700],
+                     color: 'white',
+                     marginLeft: 5
+                  }}
+               >
+                  Delete
+               </Button>
+            </div>
+         )
+      }
    ];
 
    return (

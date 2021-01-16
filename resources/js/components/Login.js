@@ -42,8 +42,11 @@ const Login = () => {
 
    const AlertTag = () => {
       return (
-         <Alert variant="filled" severity="error">
-            {AlertMessage}
+         <Alert
+            variant="filled"
+            severity="error"
+         >
+            <Typography variant="inherit">{AlertMessage}</Typography>
          </Alert>
       );
    }
@@ -117,7 +120,7 @@ const Login = () => {
    }
 
    return (
-      <div style={{marginTop: '20vh'}}>
+      <div style={{ marginTop: '20vh' }}>
          <Grid container direction="row" justify="center">
             <Grid item xl={3} lg={4} md={6} sm={11} xs={11}>
                <Card>
@@ -178,7 +181,7 @@ const Login = () => {
                            </Button>
                            <Button
                               variant="text"
-                              color="primary"
+                              color="secondary"
                               fullWidth
                               style={{ marginTop: 10 }}
                               component={Link}

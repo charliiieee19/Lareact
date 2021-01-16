@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import AppBar from '@material-ui/core/AppBar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Divider from '@material-ui/core/Divider';
@@ -24,10 +24,11 @@ import {
 } from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
-import { Button, Collapse } from '@material-ui/core';
+import { Button, Collapse, Menu, MenuItem } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
+import { last } from 'lodash';
 
 const drawerWidth = 250;
 const useStyles = makeStyles((theme) => ({
@@ -73,13 +74,40 @@ const SideBar = (props) => {
    const { window } = props;
    const classes = useStyles();
    const theme = useTheme();
-   const [mobileOpen, setMobileOpen] = React.useState(false);
-   const [listOpen, setListOpen] = React.useState(false);
+   const [mobileOpen, setMobileOpen] = useState(false);
+   const [listOpen, setListOpen] = useState(false);
+   const [userName, setUserName] = useState("");
+   const [anchorEl, setAnchorEl] = React.useState(null);
    const history = useHistory();
 
    const handleDrawerToggle = () => {
       setMobileOpen(!mobileOpen);
-   };
+   }
+
+   const handleClick = (event) => {
+      setAnchorEl(event.currentTarget);
+   }
+
+   const handleClose = () => {
+      setAnchorEl(null);
+   }
+
+   const GetSession = () => {
+      axios.get('/api/SessionCheck')
+         .then(res => {
+            let gender = res.data[0].gender === "M" ? 'Mr.' : 'Ms.';
+            let lastname = res.data[0].lastname;
+            let user = `Hi, ${gender} ${lastname}`;
+
+            setUserName(user);
+         }).catch(err => {
+            alert(err);
+         });
+   }
+
+   useEffect(() => {
+      GetSession();
+   }, []);
 
    const handleLogout = () => {
       axios.get('/api/Logout')
@@ -111,7 +139,6 @@ const SideBar = (props) => {
                   <AssignmentRounded />
                </ListItemIcon>
                <ListItemText primary="Requests" />
-               {/* {listOpen ? <ExpandMoreRounded /> : <ExpandLessRounded />} */}
             </ListItem>
             {/* <Collapse in={listOpen} unmountOnExit>
                <List component="div" disablePadding>
@@ -153,7 +180,7 @@ const SideBar = (props) => {
    return (
       <div className={classes.root}>
          <CssBaseline />
-         <AppBar position="fixed" className={classes.appBar} color="secondary">
+         <AppBar position="fixed" className={classes.appBar} color="primary">
             <Toolbar>
                <IconButton
                   color="inherit"
@@ -164,9 +191,22 @@ const SideBar = (props) => {
                >
                   <MenuIcon />
                </IconButton>
-
                <div style={{ flexGrow: 1 }}></div>
-               <Button color="inherit" onClick={handleLogout}>Logout</Button>
+               <Button color="inherit" onClick={handleLogout}></Button>
+               <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+                  {userName}
+               </Button>
+               <Menu
+                  id="simple-menu"
+                  anchorEl={anchorEl}
+                  keepMounted
+                  open={Boolean(anchorEl)}
+                  onClose={handleClose}
+               >
+                  <MenuItem onClick={handleClose}>Profile</MenuItem>
+                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                  <MenuItem onClick={handleLogout}>Logout</MenuItem>
+               </Menu>
             </Toolbar>
          </AppBar>
          <nav className={classes.drawer}>
@@ -183,7 +223,7 @@ const SideBar = (props) => {
                      paper: classes.drawerPaper,
                   }}
                   ModalProps={{
-                     keepMounted: true, // Better open performance on mobile.
+                     keepMounted: true
                   }}
                >
                   {drawer}

@@ -83,6 +83,7 @@ class StudentController extends Controller
          'data' => $sql,
          'q' => $query
       );
+
       return json_encode($res);
    }
 
