@@ -6,17 +6,17 @@ import LazyLoading from "./LazyLoading";
 import TopBarProgress from "react-topbar-progress-indicator";
 import { createMuiTheme } from '@material-ui/core';
 import { ThemeProvider } from '@material-ui/styles';
-import purple from '@material-ui/core/colors/purple';
+import indigo from '@material-ui/core/colors/indigo';
 import axios from 'axios';
 
 const theme = createMuiTheme({
    palette: {
       type: "dark",
       primary: {
-         main: purple[500],
+         main: indigo[500],
       },
       secondary: {
-         main: '#f44336',
+         main: '#f50057',
       },
    }
 });

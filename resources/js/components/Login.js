@@ -159,7 +159,7 @@ const Login = () => {
                         </Grid>
                         <Grid item lg={12} style={{ marginBottom: '15px' }}>
                            <FormControlLabel
-                              control={<Checkbox label="Show password" id="ShowPass" onChange={ShowPassChange} />}
+                              control={<Checkbox label="Show password" id="ShowPass" onChange={ShowPassChange} color="primary" />}
                               label="Show password"
                            />
                         </Grid>

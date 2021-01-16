@@ -28,7 +28,6 @@ import { Button, Collapse, Menu, MenuItem } from '@material-ui/core';
 import { makeStyles, useTheme } from '@material-ui/core/styles';
 import { Link, useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { last } from 'lodash';
 
 const drawerWidth = 250;
 const useStyles = makeStyles((theme) => ({
@@ -95,11 +94,13 @@ const SideBar = (props) => {
    const GetSession = () => {
       axios.get('/api/SessionCheck')
          .then(res => {
-            let gender = res.data[0].gender === "M" ? 'Mr.' : 'Ms.';
-            let lastname = res.data[0].lastname;
-            let user = `Hi, ${gender} ${lastname}`;
+            if (res.data !== null) {
+               let gender = res.data[0].gender === "M" ? 'Mr.' : 'Ms.';
+               let lastname = res.data[0].lastname;
+               let user = `Hi, ${gender} ${lastname}`;
 
-            setUserName(user);
+               setUserName(user);
+            }
          }).catch(err => {
             alert(err);
          });

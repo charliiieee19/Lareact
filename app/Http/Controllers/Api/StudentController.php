@@ -124,4 +124,15 @@ class StudentController extends Controller
 
       return json_encode($res);
    }
+
+   public function GetRequests()
+   {
+      $qRooms = DB::select('SELECT * FROM schedules1');
+
+      $res = array(
+         'Requests' => $qRooms
+      );
+
+      return json_encode($res);
+   }
 }

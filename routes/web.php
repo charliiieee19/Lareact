@@ -15,3 +15,4 @@ Route::get('api/UserList2', 'App\Http\Controllers\Api\StudentController@UserList
 Route::post('api/GetUserInfo', 'App\Http\Controllers\Api\StudentController@GetUserInfo');
 Route::get('api/UserInfoDropdown', 'App\Http\Controllers\Api\StudentController@UserInfoDropdown');
 Route::get('api/RequestsDropdown', 'App\Http\Controllers\Api\StudentController@RequestsDropdown');
+Route::get('api/GetRequests', 'App\Http\Controllers\Api\StudentController@GetRequests');

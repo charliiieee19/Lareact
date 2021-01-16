@@ -59,12 +59,19 @@ const Requests = () => {
    }
 
    const GetData = () => {
-
+      axios.get('/api/GetRequests')
+         .then(res => {
+            console.log(res);
+            setRows(res.data.Requests);
+         }).catch(err => {
+            alert(err);
+         });
    }
 
    useEffect(() => {
       DropdownData();
-   }, []);
+      GetData();
+   }, [startDate, endDate, room, type]);
 
    const columns = [
       { name: 'Date', selector: 'lastName', sortable: true },
