@@ -54,7 +54,7 @@ const PrivateRoute = ({ children: Children, ...rest }) => {
    axios.get('/api/SessionCheck')
       .then(res => {
          if (res.data === false) {
-            localStorage.removeItem('userLogin');
+            localStorage.clear();
             session = false;
          } else {
             localStorage.setItem('userLogin', res.data[0].type);
@@ -86,7 +86,7 @@ const LoginRoute = ({ children: Children, ...rest }) => {
    axios.get('/api/SessionCheck')
       .then(res => {
          if (res.data === false) {
-            localStorage.removeItem('userLogin');
+            localStorage.clear();
             session = false;
          } else {
             localStorage.setItem('userLogin', res.data[0].type);

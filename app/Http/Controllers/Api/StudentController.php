@@ -125,12 +125,21 @@ class StudentController extends Controller
       return json_encode($res);
    }
 
-   public function GetRequests()
+   public function GetRequests(Request $request)
    {
-      $qRooms = DB::select('SELECT * FROM schedules1');
+      $StartDate = $request->post('StartDate');
+      $EndDate = $request->post('EndDate');
+      $Room = $request->post('Room');
+      $Type = $request->post('Type');
+
+      $qRooms = DB::select(
+         'CALL sp_GetRequests(?, ?, ?, ?)',
+         array($StartDate, $EndDate, $Room, $Type)
+      );
 
       $res = array(
-         'Requests' => $qRooms
+         'Requests' => $qRooms,
+         'query' => array($StartDate, $EndDate, $Room, $Type)
       );
 
       return json_encode($res);
