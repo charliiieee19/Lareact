@@ -15,4 +15,6 @@ Route::get('api/UserList2', 'App\Http\Controllers\Api\StudentController@UserList
 Route::post('api/GetUserInfo', 'App\Http\Controllers\Api\StudentController@GetUserInfo');
 Route::get('api/UserInfoDropdown', 'App\Http\Controllers\Api\StudentController@UserInfoDropdown');
 Route::get('api/RequestsDropdown', 'App\Http\Controllers\Api\StudentController@RequestsDropdown');
+Route::get('api/GetDashboardCounts', 'App\Http\Controllers\Api\StudentController@GetDashboardCounts');
 Route::post('api/GetRequests', 'App\Http\Controllers\Api\StudentController@GetRequests');
+Route::get('api/GetStudentRequests', 'App\Http\Controllers\Api\StudentController@GetStudentRequests');

@@ -101,6 +101,21 @@ class StudentController extends Controller
       return json_encode($res);
    }
 
+   public function GetDashboardCounts()
+   {
+      $qApproved = DB::select('SELECT COUNT(*) AS "Count" FROM schedules1 WHERE Status = "Approved"; ');
+      $qDisapproved = DB::select('SELECT COUNT(*) AS "Count" FROM schedules1 WHERE Status = "Disapproved"; ');
+      $qPending = DB::select('SELECT COUNT(*) AS "Count" FROM schedules1 WHERE Status = "Pending"; ');
+
+      $res = array(
+         'Approved' => $qApproved,
+         'Disapproved' => $qDisapproved,
+         'Pending' => $qPending,
+      );
+
+      return json_encode($res);
+   }
+
    public function UserInfoDropdown()
    {
       $qCourses = DB::select('SELECT * FROM courses');
@@ -138,8 +153,19 @@ class StudentController extends Controller
       );
 
       $res = array(
-         'Requests' => $qRooms,
-         'query' => array($StartDate, $EndDate, $Room, $Type)
+         'Requests' => $qRooms
+      );
+
+      return json_encode($res);
+   }
+
+   public function GetStudentRequests()
+   {
+      $session = session('isLoggedIn');
+      $qRequests = DB::select('SELECT * FROM schedules1 WHERE studentID = ?', array($session[0]->StudentID));
+
+      $res = array(
+         'Requests' => $qRequests
       );
 
       return json_encode($res);

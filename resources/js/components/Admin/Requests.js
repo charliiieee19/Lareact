@@ -132,10 +132,11 @@ const Requests = () => {
       { name: 'Date', selector: 'Date', width: '150px', sortable: true },
       { name: 'Time', selector: 'Time', width: '150px', sortable: false },
       { name: 'Room', selector: 'Room', width: '100px', sortable: true },
-      { name: 'Requester', selector: 'Requester', sortable: true },
+      { name: 'Requester', selector: 'Requester', width: '200px', sortable: true },
       {
          name: 'Status',
          sortable: true,
+         width: '150px',
          cell: row => (
             <div>
                <Typography component="div" variant="body2">
@@ -151,7 +152,7 @@ const Requests = () => {
       },
       {
          name: 'Action',
-         minWidth: '250px',
+         width: '150px',
          cell: row => (
             <div>
                <Button variant="contained" size="small" color="primary" onClick={() => ViewDetails(`${row.scheduleID}`)}>Details</Button>

@@ -20,7 +20,8 @@ import {
    DoneAllRounded,
    AssignmentRounded,
    QueryBuilderRounded,
-   NotInterestedRounded
+   NotInterestedRounded,
+   AddCircle
 } from '@material-ui/icons';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
@@ -123,45 +124,23 @@ const SideBar = (props) => {
       <div>
          <div className={classes.toolbar}>
             <Typography variant="h6" style={{ textAlign: 'center', paddingTop: '15px' }}>
-               ADMIN
+               STUDENT
             </Typography>
          </div>
          <Divider />
          <List>
-            <ListItem button component={Link} to="/Admin/Dashboard" onClick={() => setMobileOpen(false)}>
-               <ListItemIcon>
-                  <DashboardRounded />
-               </ListItemIcon>
-               <ListItemText primary="Dashboard" />
-            </ListItem>
-            <ListItem button component={Link} to="/Admin/Requests" onClick={() => setMobileOpen(false)}>
+            <ListItem button component={Link} to="/Student/Requests" onClick={() => setMobileOpen(false)}>
                <ListItemIcon>
                   <AssignmentRounded />
                </ListItemIcon>
                <ListItemText primary="Requests" />
             </ListItem>
-            {/* <Collapse in={listOpen} unmountOnExit>
-               <List component="div" disablePadding>
-                  <ListItem button className={classes.subList}>
-                     <ListItemIcon>
-                        <DoneAllRounded />
-                     </ListItemIcon>
-                     <ListItemText primary="Approved" />
-                  </ListItem>
-                  <ListItem button className={classes.subList}>
-                     <ListItemIcon>
-                        <QueryBuilderRounded />
-                     </ListItemIcon>
-                     <ListItemText primary="Pending" />
-                  </ListItem>
-                  <ListItem button className={classes.subList}>
-                     <ListItemIcon>
-                        <NotInterestedRounded />
-                     </ListItemIcon>
-                     <ListItemText primary="Disapproved" />
-                  </ListItem>
-               </List>
-            </Collapse> */}
+            <ListItem button component={Link} to="/Student/NewRequest" onClick={() => setMobileOpen(false)}>
+               <ListItemIcon>
+                  <AddCircle />
+               </ListItemIcon>
+               <ListItemText primary="New Request" />
+            </ListItem>
          </List>
          <Divider />
          <List>
@@ -209,7 +188,6 @@ const SideBar = (props) => {
             </Toolbar>
          </AppBar>
          <nav className={classes.drawer}>
-            {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
             <Hidden smUp implementation="css">
                <SwipeableDrawer
                   container={container}

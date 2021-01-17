@@ -1,8 +1,33 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { AppBar, Typography, Toolbar, Container, Card, CardContent, Grid, Box, Avatar, Button, colors, TextField } from '@material-ui/core';
-import { ListAltRounded } from '@material-ui/icons';
+import { ListAltRounded, RssFeed } from '@material-ui/icons';
+import axios from 'axios';
 
 const Dashboard = () => {
+   const [cards, setCards] = useState({
+      'Approved': 0,
+      'Disapproved': 0,
+      'Pending': 0,
+   });
+
+   const GetCards = () => {
+      axios.get('/api/GetDashboardCounts')
+         .then(res => {
+            setCards(prevState => ({
+               ...prevState,
+               'Approved': res.data.Approved[0].Count,
+               'Disapproved': res.data.Disapproved[0].Count,
+               'Pending': res.data.Pending[0].Count,
+            }));
+         }).catch(err => {
+            alert(err);
+         })
+   }
+
+   useEffect(() => {
+      GetCards();
+   }, []);
+
    return (
       <Grid container spacing={2}>
          <Grid item lg={3} md={6} sm={12} xs={12}>
@@ -25,7 +50,7 @@ const Dashboard = () => {
                            color="textPrimary"
                            variant="h5"
                         >
-                           99999
+                           {cards.Approved}
                         </Typography>
                      </Grid>
                      <Grid item>
@@ -59,8 +84,8 @@ const Dashboard = () => {
                            color="textPrimary"
                            variant="h5"
                         >
-                           99999
-                              </Typography>
+                           {cards.Pending}
+                        </Typography>
                      </Grid>
                      <Grid item>
                         <Avatar
@@ -93,8 +118,8 @@ const Dashboard = () => {
                            color="textPrimary"
                            variant="h5"
                         >
-                           99999
-                              </Typography>
+                           {cards.Disapproved}
+                        </Typography>
                      </Grid>
                      <Grid item>
                         <Avatar

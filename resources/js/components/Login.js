@@ -100,12 +100,12 @@ const Login = () => {
          }).then(res => {
             console.log(res.data);
             if (res.data[0].Message === "1") {
-               localStorage.setItem('userLogin', JSON.stringify(res.data[0]));
-
                if (res.data[0].type === "Admin") {
+                  localStorage.setItem('userLoginAdmin', res.data[0].type);
                   history.push('/Admin/Dashboard');
                } else {
-                  history.push('/Student/Dashboard');
+                  localStorage.setItem('userLoginStudent', res.data[0].type);
+                  history.push('/Student/Requests');
                }
             } else {
                setAlertMessage(res.data[0].Message);
@@ -130,7 +130,7 @@ const Login = () => {
                         <Grid item lg={12} style={{ marginBottom: '15px' }}>
                            <TextField
                               error={usernameError}
-                              label="Username"
+                              label="Username / Email"
                               id="Username"
                               variant="outlined"
                               fullWidth

@@ -48,7 +48,13 @@ const AdminUserViewEdit = LazyLoading(() => import("./components/Admin/UserViewE
 const AdminMain = LazyLoading(() => import("./components/Admin/Main"), { fallback: <TopBarProgress /> });
 const AdminRequests = LazyLoading(() => import("./components/Admin/Requests"), { fallback: <TopBarProgress /> });
 
-const PrivateRoute = ({ children: Children, ...rest }) => {
+//Student
+const StudentMain = LazyLoading(() => import("./components/Student/Main"), { fallback: <TopBarProgress /> });
+const StudentRequests = LazyLoading(() => import("./components/Student/Requests"), { fallback: <TopBarProgress /> });
+const StudentNewRequest = LazyLoading(() => import("./components/Student/NewRequest"), { fallback: <TopBarProgress /> });
+
+
+const AdminPrivateRoute = ({ children: Children, ...rest }) => {
    let session = false;
 
    axios.get('/api/SessionCheck')
@@ -57,14 +63,54 @@ const PrivateRoute = ({ children: Children, ...rest }) => {
             localStorage.clear();
             session = false;
          } else {
-            localStorage.setItem('userLogin', res.data[0].type);
+            if (res.data[0].type === "Admin") {
+               localStorage.setItem('userLoginAdmin', res.data[0].type);
+            } else {
+               localStorage.setItem('userLoginStudent', res.data[0].type);
+            }
             session = true;
          }
       }).catch(err => {
          alert(err);
       });
 
-   if (localStorage.getItem('userLogin') !== null) {
+   if (localStorage.getItem('userLoginAdmin') !== null) {
+      session = true;
+   }
+
+   return (
+      <Route {...rest}
+         render={props => {
+            return session
+               ? <Children {...props} />
+               : <Redirect to="/Login" />
+         }}
+      />
+   )
+}
+
+const StudentPrivateRoute = ({ children: Children, ...rest }) => {
+   let session = false;
+
+   axios.get('/api/SessionCheck')
+      .then(res => {
+         if (res.data === false) {
+            localStorage.clear();
+            session = false;
+         } else {
+            if (res.data[0].type === "Admin") {
+               localStorage.setItem('userLoginAdmin', res.data[0].type);
+            } else {
+               localStorage.setItem('userLoginStudent', res.data[0].type);
+            }
+
+            session = true;
+         }
+      }).catch(err => {
+         alert(err);
+      });
+
+   if (localStorage.getItem('userLoginStudent') !== null) {
       session = true;
    }
 
@@ -89,7 +135,11 @@ const LoginRoute = ({ children: Children, ...rest }) => {
             localStorage.clear();
             session = false;
          } else {
-            localStorage.setItem('userLogin', res.data[0].type);
+            if (res.data[0].type === "Admin") {
+               localStorage.setItem('userLoginAdmin', res.data[0].type);
+            } else {
+               localStorage.setItem('userLoginStudent', res.data[0].type);
+            }
             type = JSON.stringify(res.data[0].type);
             session = true;
          }
@@ -97,9 +147,14 @@ const LoginRoute = ({ children: Children, ...rest }) => {
          alert(err);
       });
 
-   if (localStorage.getItem('userLogin') !== null) {
-      session = true;
-      type = localStorage.getItem('userLogin');
+   if (localStorage.getItem('userLoginAdmin') !== null || localStorage.getItem('userLoginStudent') !== null) {
+      if (localStorage.getItem('userLoginAdmin') !== null) {
+         session = true;
+         type = localStorage.getItem('userLoginAdmin');
+      } else {
+         session = true;
+         type = localStorage.getItem('userLoginStudent');
+      }
    } else {
       type = "Login";
    }
@@ -143,6 +198,7 @@ const Routes = () => {
    //    CheckSession();
    // }, [session]);
 
+
    return (
       <div>
          {console.log(navigator)}
@@ -172,20 +228,33 @@ const Routes = () => {
                      )}
                   />
                   <LoginRoute path="/Login" children={Login} />
-                  <PrivateRoute
+                  <AdminPrivateRoute
                      path="/Admin"
                      children={({ match: { path } }) => (
                         <AdminMain>
                            <Switch>
-                              <PrivateRoute exact path={`${path}`} children={AdminDashboard} />
-                              <PrivateRoute path={`${path}/Dashboard`} children={AdminDashboard} />
-                              <PrivateRoute path={`${path}/About`} children={AdminAbout} />
-                              <PrivateRoute path={`${path}/UserList`} children={AdminUserList} />
-                              <PrivateRoute path={`${path}/Requests`} children={AdminRequests} />
-                              <PrivateRoute path={`${path}/UserViewEdit/:id`} children={AdminUserViewEdit} />
+                              <AdminPrivateRoute exact path={`${path}`} children={AdminDashboard} />
+                              <AdminPrivateRoute path={`${path}/Dashboard`} children={AdminDashboard} />
+                              <AdminPrivateRoute path={`${path}/About`} children={AdminAbout} />
+                              <AdminPrivateRoute path={`${path}/UserList`} children={AdminUserList} />
+                              <AdminPrivateRoute path={`${path}/Requests`} children={AdminRequests} />
+                              <AdminPrivateRoute path={`${path}/UserViewEdit/:id`} children={AdminUserViewEdit} />
                               <Redirect from={`${path}/*`} to="/*" />
                            </Switch>
                         </AdminMain>
+                     )}
+                  />
+                  <StudentPrivateRoute
+                     path="/Student"
+                     children={({ match: { path } }) => (
+                        <StudentMain>
+                           <Switch>
+                              <StudentPrivateRoute exact path={`${path}`} children={StudentRequests} />
+                              <StudentPrivateRoute path={`${path}/Requests`} children={StudentRequests} />
+                              <StudentPrivateRoute path={`${path}/NewRequest`} children={StudentNewRequest} />
+                              <Redirect from={`${path}/*`} to="/*" />
+                           </Switch>
+                        </StudentMain>
                      )}
                   />
                   <Route path="/Visits">
