@@ -12,7 +12,13 @@ import {
    FormControlLabel,
    Checkbox,
    Button,
-   FormHelperText
+   FormHelperText,
+   Slide,
+   Dialog,
+   DialogActions,
+   DialogContent,
+   DialogContentText,
+   DialogTitle
 } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
 import {
@@ -23,6 +29,10 @@ import {
    KeyboardDatePicker
 } from '@material-ui/pickers';
 import axios from 'axios';
+
+const Transition = React.forwardRef(function Transition(props, ref) {
+   return <Slide direction="up" ref={ref} {...props} />;
+});
 
 const style = makeStyles((theme) => ({
    card: {
@@ -93,6 +103,7 @@ const mtime = {
 
 const NewRequests = () => {
    const classes = style();
+   const [DialogOpen, setDialogOpen] = useState(false);
    const [DateNow, setDateNow] = useState(new Date().toISOString().split('T')[0]);
    const [DDRoom, setDDRoom] = useState([]);
    const [DisableEndTime, setDisableEndTime] = useState(true);
@@ -116,9 +127,7 @@ const NewRequests = () => {
       RoomErrorLabel: '',
       NoOfPersons: 0,
       NoOfPersonsError: false,
-      NoOfPersonsErrorLabel: '',
-      LCDProjector: false,
-      LEDTV: false,
+      NoOfPersonsErrorLabel: ''
    });
 
    const handleInputs = e => {
@@ -127,15 +136,6 @@ const NewRequests = () => {
       setRequestForm(prevState => ({
          ...prevState,
          [name]: value
-      }));
-   }
-
-   const handleCheckbox = e => {
-      const { value, checked, name } = e.target;
-
-      setRequestForm(prevState => ({
-         ...prevState,
-         [name]: checked
       }));
    }
 
@@ -218,7 +218,7 @@ const NewRequests = () => {
          }
       }
       if (name === "NoOfPersons") {
-         if (parseInt(value) === 0) {
+         if (parseInt(value) < 0) {
             setRequestForm(prevState => ({
                ...prevState,
                NoOfPersonsError: true,
@@ -310,13 +310,30 @@ const NewRequests = () => {
             RoomErrorLabel: 'Required'
          }));
       }
-      if (RequestForm.NoOfPersons === 0) {
+      if (RequestForm.NoOfPersons < 0) {
          Complete = false;
          setRequestForm(prevState => ({
             ...prevState,
             NoOfPersonsError: true,
             NoOfPersonsErrorLabel: 'Required'
          }));
+      }
+
+      if (Complete) {
+         axios.post('/api/CheckConflictSchedules',
+            {
+               Date: RequestForm.Date,
+               Room: RequestForm.Room,
+               StartTime: RequestForm.StartTime,
+               EndTime: RequestForm.EndTime
+            }).then(res => {
+               console.log(res);
+               if (res.data.data.length !== 0) {
+                  setDialogOpen(true);
+               }
+            }).catch(err => {
+               alert(err);
+            });
       }
    }
 
@@ -490,19 +507,19 @@ const NewRequests = () => {
                <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
                   <InputLabel>Audio Visual Requirements</InputLabel>
                   <FormControlLabel
-                     control={<Checkbox label="LCD Projector" color="primary" name="LCDProjector" onChange={e => handleCheckbox(e)} />}
+                     control={<Checkbox label="LCD Projector" color="primary" name="LCDProjector" />}
                      label="LCD Projector"
                   />
                   <FormControlLabel
-                     control={<Checkbox label="LED TV" color="primary" name="LEDTV" onChange={e => handleCheckbox(e)} />}
+                     control={<Checkbox label="LED TV" color="primary" name="LEDTV" />}
                      label="LED TV"
                   />
                   <FormControlLabel
-                     control={<Checkbox label="Sound" color="primary" />}
+                     control={<Checkbox label="Sound" color="primary" name="Sound" />}
                      label="Sound"
                   />
                   <FormControlLabel
-                     control={<Checkbox label="Microphone" color="primary" />}
+                     control={<Checkbox label="Microphone" color="primary" name="Microphone" />}
                      label="Microphone"
                   />
                </Grid>
@@ -520,6 +537,27 @@ const NewRequests = () => {
                </Grid>
             </Grid>
          </Card>
+         <Dialog
+            open={DialogOpen}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={() => setDialogOpen(false)}
+            fullWidth
+            maxWidth="md"
+         >
+            <DialogTitle>Conflict Schedules</DialogTitle>
+            <DialogContent>
+               <DialogContentText>
+                  Let Google help apps determine location. This means sending anonymous location data to
+                  Google, even when no apps are running.
+            </DialogContentText>
+            </DialogContent>
+            <DialogActions>
+               <Button onClick={() => setDialogOpen(false)} color="inherit">
+                  Close
+               </Button>
+            </DialogActions>
+         </Dialog>
       </div>
    );
 }
