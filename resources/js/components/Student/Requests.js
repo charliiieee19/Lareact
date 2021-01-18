@@ -36,7 +36,7 @@ const Requests = () => {
    return (
       <div>
          <Card className={classes.card}>
-            <Typography className={classes.center} variant="h6">Requests</Typography>
+            <Typography className={classes.center} variant="h5">Requests</Typography>
          </Card>
       </div>
    );
