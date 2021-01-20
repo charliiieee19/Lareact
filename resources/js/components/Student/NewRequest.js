@@ -397,10 +397,10 @@ const NewRequest = () => {
                      }).then(res => {
                         console.log(res);
 
-                        if (res.success) {
+                        if (res.data.success) {
                            handleSubmitSuccess();
                         } else {
-                           alert(res.message);
+                           alert(res.data.message);
                         }
                      }).catch(err => {
                         alert(err);
