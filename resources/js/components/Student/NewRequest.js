@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import {
    Card,
+   Paper,
    Grid,
+   Box,
    Typography,
    makeStyles,
    TextField,
@@ -18,7 +20,15 @@ import {
    DialogActions,
    DialogContent,
    DialogContentText,
-   DialogTitle
+   DialogTitle,
+   CircularProgress,
+   Table,
+   TableContainer,
+   TableBody,
+   TableRow,
+   TableCell,
+   TableHead,
+   Snackbar
 } from '@material-ui/core';
 import DateFnsUtils from '@date-io/date-fns'; // choose your lib
 import {
@@ -28,11 +38,17 @@ import {
    MuiPickersUtilsProvider,
    KeyboardDatePicker
 } from '@material-ui/pickers';
+import MuiAlert from '@material-ui/lab/Alert';
 import axios from 'axios';
 
 const Transition = React.forwardRef(function Transition(props, ref) {
    return <Slide direction="up" ref={ref} {...props} />;
 });
+
+const Alert = (props) => (
+   <MuiAlert elevation={6} variant="filled" {...props} />
+);
+
 
 const style = makeStyles((theme) => ({
    card: {
@@ -101,13 +117,17 @@ const mtime = {
 };
 
 
-const NewRequests = () => {
+const NewRequest = () => {
    const classes = style();
    const [DialogOpen, setDialogOpen] = useState(false);
+   const [SnackbarOpen, setSnackbarOpen] = useState(false);
+   const [SnackbarMessage, setSnackbarMessage] = useState("");
+   const [Loading, setLoading] = useState(false);
    const [DateNow, setDateNow] = useState(new Date().toISOString().split('T')[0]);
    const [DDRoom, setDDRoom] = useState([]);
    const [DisableEndTime, setDisableEndTime] = useState(true);
    const [EndTimeValues, setEndTimeValues] = useState([]);
+   const [ConflictData, setConflictData] = useState([]);
    const [RequestForm, setRequestForm] = useState({
       Subject: '',
       SubjectError: false,
@@ -127,7 +147,10 @@ const NewRequests = () => {
       RoomErrorLabel: '',
       NoOfPersons: 0,
       NoOfPersonsError: false,
-      NoOfPersonsErrorLabel: ''
+      NoOfPersonsErrorLabel: '',
+      Purpose: '',
+      PurposeError: false,
+      PurposeErrorLabel: '',
    });
 
    const handleInputs = e => {
@@ -218,7 +241,7 @@ const NewRequests = () => {
          }
       }
       if (name === "NoOfPersons") {
-         if (parseInt(value) < 0) {
+         if (parseInt(value) <= 0) {
             setRequestForm(prevState => ({
                ...prevState,
                NoOfPersonsError: true,
@@ -229,6 +252,21 @@ const NewRequests = () => {
                ...prevState,
                NoOfPersonsError: false,
                NoOfPersonsErrorLabel: ''
+            }));
+         }
+      }
+      if (name === "Purpose") {
+         if (value.trim() === "") {
+            setRequestForm(prevState => ({
+               ...prevState,
+               PurposeError: true,
+               PurposeErrorLabel: 'Required'
+            }));
+         } else {
+            setRequestForm(prevState => ({
+               ...prevState,
+               PurposeError: false,
+               PurposeErrorLabel: ''
             }));
          }
       }
@@ -271,7 +309,7 @@ const NewRequests = () => {
       console.log(RequestForm);
       let Complete = true;
 
-      if (RequestForm.Subject === "") {
+      if (RequestForm.Subject.trim() === "") {
          Complete = false;
          setRequestForm(prevState => ({
             ...prevState,
@@ -279,7 +317,7 @@ const NewRequests = () => {
             SubjectErrorLabel: 'Required'
          }));
       }
-      if (RequestForm.Instructor === "") {
+      if (RequestForm.Instructor.trim() === "") {
          Complete = false;
          setRequestForm(prevState => ({
             ...prevState,
@@ -310,7 +348,7 @@ const NewRequests = () => {
             RoomErrorLabel: 'Required'
          }));
       }
-      if (RequestForm.NoOfPersons < 0) {
+      if (RequestForm.NoOfPersons <= 0) {
          Complete = false;
          setRequestForm(prevState => ({
             ...prevState,
@@ -318,8 +356,17 @@ const NewRequests = () => {
             NoOfPersonsErrorLabel: 'Required'
          }));
       }
+      if (RequestForm.Purpose.trim() === "") {
+         Complete = false;
+         setRequestForm(prevState => ({
+            ...prevState,
+            PurposeError: true,
+            PurposeErrorLabel: 'Required'
+         }));
+      }
 
       if (Complete) {
+         setLoading(true);
          axios.post('/api/CheckConflictSchedules',
             {
                Date: RequestForm.Date,
@@ -329,12 +376,69 @@ const NewRequests = () => {
             }).then(res => {
                console.log(res);
                if (res.data.data.length !== 0) {
+                  setConflictData(res.data.data);
                   setDialogOpen(true);
+               } else {
+                  let Equipments = $("input:checkbox:checked").map(function () {
+                     return $(this).attr('name');
+                  }).get().toString();
+
+                  axios.post('/api/SubmitRequest',
+                     {
+                        "Subject": RequestForm.Subject,
+                        "Instructor": RequestForm.Instructor,
+                        "Date": RequestForm.Date,
+                        "StartTime": RequestForm.StartTime,
+                        "EndTime": RequestForm.EndTime,
+                        "Room": RequestForm.Room,
+                        "NoOfPersons": RequestForm.NoOfPersons,
+                        "Purpose": RequestForm.Purpose,
+                        "Equipments": Equipments
+                     }).then(res => {
+                        console.log(res);
+
+                        handleSubmitSuccess();
+                     }).catch(err => {
+                        alert(err);
+                     });
                }
+
+               setLoading(false);
             }).catch(err => {
                alert(err);
             });
       }
+   }
+
+   const handleSubmitSuccess = () => {
+      setRequestForm(prevState => ({
+         ...prevState,
+         Subject: '',
+         SubjectError: false,
+         SubjectErrorLabel: '',
+         Instructor: '',
+         InstructorError: false,
+         InstructorErrorLabel: '',
+         Date: new Date().toISOString().split('T')[0],
+         StartTime: 'Choose',
+         StartTimeError: false,
+         StartTimeErrorLabel: '',
+         EndTime: 'Choose',
+         EndTimeError: false,
+         EndTimeErrorLabel: '',
+         Room: 'Choose',
+         RoomError: false,
+         RoomErrorLabel: '',
+         NoOfPersons: 0,
+         NoOfPersonsError: false,
+         NoOfPersonsErrorLabel: '',
+         Purpose: '',
+         PurposeError: false,
+         PurposeErrorLabel: '',
+      }));
+
+      setSnackbarMessage("Request Submitted");
+      setSnackbarOpen(true);
    }
 
    useEffect(() => {
@@ -387,15 +491,6 @@ const NewRequests = () => {
                   />
                </Grid>
                <Grid item xl={4} lg={4} md={4} sm={12} xs={12}>
-                  {/* <TextField
-                     type="date"
-                     variant="outlined"
-                     value={RequestForm.Date}
-                     onInput={e => handleInputs(e)}
-                     label="Date"
-                     name="Date"
-                     fullWidth
-                  /> */}
                   <MuiPickersUtilsProvider utils={DateFnsUtils}>
                      <KeyboardDatePicker
                         autoOk
@@ -493,11 +588,27 @@ const NewRequests = () => {
                      type="number"
                      variant="outlined"
                      value={RequestForm.NoOfPersons}
-                     onInput={handleInputs}
+                     onInput={e => handleInputs(e)}
                      label="No Of Persons"
                      name="NoOfPersons"
                      error={RequestForm.NoOfPersonsError}
                      helperText={RequestForm.NoOfPersonsErrorLabel}
+                     fullWidth
+                  />
+               </Grid>
+            </Grid>
+            <br />
+            <Grid container spacing={3}>
+               <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                  <TextField
+                     type="text"
+                     variant="outlined"
+                     value={RequestForm.Purpose}
+                     onInput={e => handleInputs(e)}
+                     label="Purpose"
+                     name="Purpose"
+                     error={RequestForm.PurposeError}
+                     helperText={RequestForm.PurposeErrorLabel}
                      fullWidth
                   />
                </Grid>
@@ -533,7 +644,11 @@ const NewRequests = () => {
             <br />
             <Grid container spacing={3}>
                <Grid item xl={3} lg={3} md={3} sm={12} xs={12}>
-                  <Button variant="contained" color="primary" onClick={handleSubmit}>Submit</Button>
+                  <Button variant="contained" color="primary" onClick={handleSubmit}>
+                     {
+                        Loading ? <CircularProgress size={24} color="inherit" /> : 'Submit'
+                     }
+                  </Button>
                </Grid>
             </Grid>
          </Card>
@@ -545,12 +660,41 @@ const NewRequests = () => {
             fullWidth
             maxWidth="md"
          >
-            <DialogTitle>Conflict Schedules</DialogTitle>
+            <DialogTitle style={{ textAlign: 'center' }}>Conflict Schedules</DialogTitle>
             <DialogContent>
-               <DialogContentText>
-                  Let Google help apps determine location. This means sending anonymous location data to
-                  Google, even when no apps are running.
-            </DialogContentText>
+               <TableContainer>
+                  <Table>
+                     <TableHead>
+                        <TableRow>
+                           <TableCell>Date</TableCell>
+                           <TableCell>Time</TableCell>
+                           <TableCell>Requester</TableCell>
+                           <TableCell>Status</TableCell>
+                        </TableRow>
+                     </TableHead>
+                     <TableBody>
+                        {
+                           ConflictData.map(data => (
+                              <TableRow key={data.scheduleID}>
+                                 <TableCell>{data.date}</TableCell>
+                                 <TableCell>{`${mtime[data.startTime]} - ${mtime[data.endTime]}`}</TableCell>
+                                 <TableCell>{data.requester}</TableCell>
+                                 <TableCell>
+                                    <Typography variant="body2" component="div">
+                                       <Box color={
+                                          data.Status === 'Approved'
+                                             ? 'success.main'
+                                             : data.Status === 'Pending'
+                                                ? 'warning.main' : 'error.main'
+                                       }>{data.Status}</Box>
+                                    </Typography>
+                                 </TableCell>
+                              </TableRow>
+                           ))
+                        }
+                     </TableBody>
+                  </Table>
+               </TableContainer>
             </DialogContent>
             <DialogActions>
                <Button onClick={() => setDialogOpen(false)} color="inherit">
@@ -558,8 +702,13 @@ const NewRequests = () => {
                </Button>
             </DialogActions>
          </Dialog>
+         <Snackbar open={SnackbarOpen} onClose={() => setSnackbarOpen(false)}>
+            <Alert severity="success" onClose={() => setSnackbarOpen(false)}>
+               {SnackbarMessage}
+            </Alert>
+         </Snackbar>
       </div>
    );
 }
 
-export default NewRequests;
+export default NewRequest;

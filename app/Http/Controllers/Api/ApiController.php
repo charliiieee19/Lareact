@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
+use Throwable;
 
 class ApiController extends Controller
 {
@@ -186,6 +188,55 @@ class ApiController extends Controller
       $res = array(
          'data' => $qCheckConflict
       );
+
+      return json_encode($res);
+   }
+   public function SubmitRequest(Request $request)
+   {
+      if (session('isLoggedIn')) {
+         $StudentID = session('isLoggedIn')[0]->StudentID;
+         $Subject = $request->post('Subject');
+         $Instructor = $request->post('Instructor');
+         $Date = $request->post('Date');
+         $StartTime = $request->post('StartTime');
+         $EndTime = $request->post('EndTime');
+         $Room = $request->post('Room');
+         $NoOfPersons = $request->post('NoOfPersons');
+         $Purpose = $request->post('Purpose');
+         $Equipments = $request->post('Equipments');
+
+         try {
+            DB::select(
+               'CALL sp_SubmitRequest(?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+               array(
+                  $StudentID,
+                  $Subject,
+                  $Instructor,
+                  $Date,
+                  $StartTime,
+                  $EndTime,
+                  $Room,
+                  $NoOfPersons,
+                  $Purpose,
+                  $Equipments
+               )
+            );
+
+            $res = array(
+               'success' => true
+            );
+         } catch (\Illuminate\Database\QueryException $e) {
+            $res = array(
+               'success' => false,
+               'message' => $e->getMessage()
+            );
+         }
+      } else {
+         $res = array(
+            'success' => false,
+            'message' => 'Session Expired'
+         );
+      }
 
       return json_encode($res);
    }

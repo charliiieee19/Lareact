@@ -10,23 +10,29 @@ const Dashboard = () => {
       'Pending': 0,
    });
 
-   const GetCards = () => {
-      axios.get('/api/GetDashboardCounts')
-         .then(res => {
-            setCards(prevState => ({
-               ...prevState,
-               'Approved': res.data.Approved[0].Count,
-               'Disapproved': res.data.Disapproved[0].Count,
-               'Pending': res.data.Pending[0].Count,
-            }));
-         }).catch(err => {
-            alert(err);
-         })
-   }
+
 
    useEffect(() => {
-      GetCards();
-   }, []);
+      let isMounted = true;
+
+      axios.get('/api/GetDashboardCounts')
+         .then(res => {
+            if (isMounted) {
+               setCards(prevState => ({
+                  ...prevState,
+                  'Approved': res.data.Approved[0].Count,
+                  'Disapproved': res.data.Disapproved[0].Count,
+                  'Pending': res.data.Pending[0].Count,
+               }));
+            }
+         }).catch(err => {
+            alert(err);
+         });
+
+      return () => {
+         isMounted = false;
+      }
+   }, [cards]);
 
    return (
       <Grid container spacing={2}>
@@ -119,40 +125,6 @@ const Dashboard = () => {
                            variant="h5"
                         >
                            {cards.Disapproved}
-                        </Typography>
-                     </Grid>
-                     <Grid item>
-                        <Avatar
-                           style={{ height: 56, width: 56, backgroundColor: colors.blue[900], color: colors.amber[50] }}
-                        >
-                           <ListAltRounded />
-                        </Avatar>
-                     </Grid>
-                  </Grid>
-               </CardContent>
-            </Card>
-         </Grid>
-         <Grid item lg={3} md={6} sm={12} xs={12}>
-            <Card>
-               <CardContent>
-                  <Grid
-                     container
-                     justify="space-between"
-                     spacing={3}
-                  >
-                     <Grid item>
-                        <Typography
-                           color="textSecondary"
-                           gutterBottom
-                           variant="h6"
-                        >
-                           Approved <br /> Requests
-                              </Typography>
-                        <Typography
-                           color="textPrimary"
-                           variant="h5"
-                        >
-                           99999
                         </Typography>
                      </Grid>
                      <Grid item>

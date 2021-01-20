@@ -20,17 +20,23 @@ const style = makeStyles((theme) => ({
 const Requests = () => {
    const classes = style();
 
-   const GetRequests = () => {
-      axios.get('/api/GetStudentRequests')
-         .then(res => {
-            console.log(res.data);
-         }).catch(err => {
-            alert(err);
-         });
-   }
-
    useEffect(() => {
+      let isMounted = true;
+
+      const GetRequests = () => {
+         axios.get('/api/GetStudentRequests')
+            .then(res => {
+               console.log(res.data);
+            }).catch(err => {
+               alert(err);
+            });
+      }
+
       GetRequests();
+
+      return () => {
+         isMounted = false;
+      }
    }, []);
 
    return (

@@ -129,10 +129,10 @@ const Requests = () => {
    }, [startDate, endDate, room, type]);
 
    const columns = [
-      { name: 'Date', selector: 'Date', width: '150px', sortable: true },
+      { name: 'Date', selector: 'Date', width: '100px', sortable: true },
       { name: 'Time', selector: 'Time', width: '150px', sortable: false },
-      { name: 'Room', selector: 'Room', width: '100px', sortable: true },
-      { name: 'Requester', selector: 'Requester', width: '200px', sortable: true },
+      { name: 'Room', selector: 'Room', width: '100px', sortable: true, wrap: true },
+      { name: 'Requester', selector: 'Requester', width: '180px', sortable: true, wrap: true },
       {
          name: 'Status',
          sortable: true,
@@ -152,21 +152,38 @@ const Requests = () => {
       },
       {
          name: 'Action',
-         width: '150px',
+         width: '300px',
          cell: row => (
             <div>
                <Button variant="contained" size="small" color="primary" onClick={() => ViewDetails(`${row.scheduleID}`)}>Details</Button>
-               {/* <Button
-                  variant="contained"
-                  size="small"
-                  style={{
-                     backgroundColor: colors.red[700],
-                     color: 'white',
-                     marginLeft: 5
-                  }}
-               >
-                  Delete
-               </Button> */}
+               {
+                  row.Status === 'Pending'
+                     ? <span>
+                        <Button
+                           variant="contained"
+                           size="small"
+                           style={{
+                              backgroundColor: colors.green[700],
+                              color: 'white',
+                              marginLeft: 5
+                           }}
+                        >
+                           Approve
+                        </Button>
+                        <Button
+                           variant="contained"
+                           size="small"
+                           style={{
+                              backgroundColor: colors.red[700],
+                              color: 'white',
+                              marginLeft: 5
+                           }}
+                        >
+                           Disapprove
+                        </Button>
+                     </span>
+                     : ''
+               }
             </div>
          )
       }
