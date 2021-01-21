@@ -11,6 +11,7 @@ Route::post('api/GetUserInfo', 'App\Http\Controllers\Api\ApiController@GetUserIn
 Route::post('api/GetRequests', 'App\Http\Controllers\Api\ApiController@GetRequests');
 Route::post('api/CheckConflictSchedules', 'App\Http\Controllers\Api\ApiController@CheckConflictSchedules');
 Route::post('api/SubmitRequest', 'App\Http\Controllers\Api\ApiController@SubmitRequest');
+Route::post('api/ApproveRequest', 'App\Http\Controllers\Api\ApiController@ApproveRequest');
 
 Route::get('api/Logout', 'App\Http\Controllers\Api\ApiController@Logout');
 Route::get('api/SessionCheck', 'App\Http\Controllers\Api\ApiController@SessionCheck');

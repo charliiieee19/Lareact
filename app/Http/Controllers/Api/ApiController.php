@@ -240,4 +240,38 @@ class ApiController extends Controller
 
       return json_encode($res);
    }
+
+   public function ApproveRequest(Request $request)
+   {
+      if (session('isLoggedIn')) {
+         $UserID = session('isLoggedIn')[0]->StudentID;
+         $ScheduleID = $request->post('ScheduleID');
+
+         try {
+            DB::select(
+               'CALL sp_ApproveRequest(?, ?)',
+               array(
+                  $UserID,
+                  $ScheduleID
+               )
+            );
+
+            $res = array(
+               'success' => true
+            );
+         } catch (\Illuminate\Database\QueryException $e) {
+            $res = array(
+               'success' => false,
+               'message' => $e->getMessage()
+            );
+         }
+      } else {
+         $res = array(
+            'success' => false,
+            'message' => 'Session Expired'
+         );
+      }
+
+      return json_encode($res);
+   }
 }
