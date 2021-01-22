@@ -201,7 +201,6 @@ const Routes = () => {
 
    return (
       <div>
-         {console.log(navigator)}
          <ThemeProvider theme={theme}>
             <Router>
                <Switch>
@@ -214,7 +213,6 @@ const Routes = () => {
                      path="/Home"
                      children={({ match: { path } }) => (
                         <LPMain>
-                           {console.log(path)}
                            <Switch>
                               <Route exact path="/" component={LandingPage} />
                               <Route path={`${path}/Gallery`} component={LPGallery} />

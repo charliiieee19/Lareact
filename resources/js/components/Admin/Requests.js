@@ -77,17 +77,45 @@ const Requests = () => {
    const [forceReloadData, setforceReloadData] = useState(false);
    const [tableLoading, setTableLoading] = useState(true);
    const [ApproveDialog, setApproveDialog] = useState(false);
+   const [DisapproveDialog, setDisapproveDialog] = useState(false);
    const [ApproveDetails, setApproveDetails] = useState({
       ScheduleID: '',
       Date: '',
       Time: '',
-      Room: ''
+      Room: '',
+      Loading: false
    });
-   const [ApproveLoading, setApproveLoading] = useState(false);
+   const [DisapproveDetails, setDisapproveDetails] = useState({
+      ScheduleID: '',
+      Date: '',
+      Time: '',
+      Room: '',
+      Loading: false
+   });
    const [SnackbarOpen, setSnackbarOpen] = useState({
       Open: false,
       Type: '',
       Message: ''
+   });
+   const [DetailsData, setDetailsData] = useState({
+      Dialog: false,
+      Loading: false,
+      Date: '',
+      Time: '',
+      DateRequested: '',
+      Subject: '',
+      Instructor: '',
+      Room: '',
+      Requester: '',
+      Department: '',
+      NoOfStudents: 0,
+      StudentID: '',
+      ContactNo: '',
+      Purpose: '',
+      Equipments: '',
+      Status: '',
+      ActionDate: '',
+      ActionBy: ''
    });
 
    const mtime = {
@@ -119,7 +147,34 @@ const Requests = () => {
    };
 
    const ViewDetails = (ID) => {
-      alert(ID);
+      setDetailsData(prevState => ({ ...prevState, Dialog: true, Loading: true }));
+
+      axios.post('/api/GetRequestDetails', {
+         "ScheduleID": ID
+      }).then(res => {
+         setDetailsData(prevState => ({
+            ...prevState,
+            Subject: res.data.data[0].subject,
+            Instructor: res.data.data[0].instructor,
+            Date: res.data.data[0].date,
+            Time: `${mtime[res.data.data[0].startTime]} - ${mtime[res.data.data[0].endTime]}`,
+            Room: res.data.data[0].room,
+            NoOfStudents: res.data.data[0].noOfStudents,
+            Department: res.data.data[0].department,
+            Requester: res.data.data[0].requester,
+            ContactNo: res.data.data[0].contactNo,
+            Purpose: res.data.data[0].purpose,
+            StudentID: res.data.data[0].studentID,
+            Equipments: res.data.data[0].Equipments.replace(/,/g, ", "),
+            Status: res.data.data[0].Status,
+            ActionDate: res.data.data[0].ActionDate,
+            ActionBy: res.data.data[0].ActionBy,
+            DateRequested: res.data.data[0].dateRequested,
+            Loading: false
+         }));
+      }).catch(err => {
+         alert(err);
+      });
    }
 
    const handleApproveDialog = (ID, Date, Time, Room) => {
@@ -131,17 +186,26 @@ const Requests = () => {
          Time: Time,
          Room: Room
       }));
-      console.log(ID, Date, Time, Room);
+   }
+
+   const handleDisapproveDialog = (ID, Date, Time, Room) => {
+      setDisapproveDialog(true);
+      setDisapproveDetails(prevState => ({
+         ...prevState,
+         ScheduleID: ID,
+         Date: Date,
+         Time: Time,
+         Room: Room
+      }));
    }
 
    const handleApprove = () => {
-      setApproveLoading(true);
+      setApproveDetails(prevState => ({ ...prevState, Loading: true }));
+
       axios.post('/api/ApproveRequest',
          {
             "ScheduleID": ApproveDetails.ScheduleID
          }).then(res => {
-            console.log(res);
-
             if (res.data.success) {
                setApproveDialog(false);
                setSnackbarOpen(prevState => ({
@@ -150,53 +214,82 @@ const Requests = () => {
                   Type: 'success',
                   Message: 'Request Approved'
                }));
+
                setforceReloadData(!forceReloadData);
             } else {
                alert(res.data.message);
             }
 
-            setApproveLoading(false);
+            setApproveDetails(prevState => ({ ...prevState, Loading: false }));
          }).catch(err => {
             alert(err);
-         })
+         });
    }
 
-   const GetData = (isMounted) => {
-      if (isMounted) {
-         setTableLoading(true);
-      }
+   const handleDisapprove = () => {
+      setDisapproveDetails(prevState => ({ ...prevState, Loading: true }));
 
-      axios.post('/api/GetRequests', {
-         'StartDate': startDate,
-         'EndDate': endDate,
-         'Room': room,
-         'Type': type,
-      }).then(res => {
-         console.log(res);
-         let partialRows = [];
+      axios.post('/api/DisapproveRequest',
+         {
+            "ScheduleID": DisapproveDetails.ScheduleID
+         }).then(res => {
+            if (res.data.success) {
+               setDisapproveDialog(false);
+               setSnackbarOpen(prevState => ({
+                  ...prevState,
+                  Open: true,
+                  Type: 'error',
+                  Message: 'Request Disapproved'
+               }));
 
-         for (let i = 0; i < res.data.Requests.length; i++) {
-            let obj = {};
-            obj.Date = res.data.Requests[i].date;
-            obj.Time = `${mtime[res.data.Requests[i].startTime]} - ${mtime[res.data.Requests[i].endTime]}`;
-            obj.Room = res.data.Requests[i].room;
-            obj.Requester = res.data.Requests[i].requester;
-            obj.Status = res.data.Requests[i].Status;
-            obj.scheduleID = res.data.Requests[i].scheduleID;
-            partialRows.push(obj);
-         }
+               setforceReloadData(!forceReloadData);
+            } else {
+               alert(res.data.message);
+            }
 
-         if (isMounted) {
-            setRows(partialRows);
-            setTableLoading(false);
-         }
-      }).catch(err => {
-         alert(err);
-      });
+            setDisapproveDetails(prevState => ({ ...prevState, Loading: false }));
+         }).catch(err => {
+            alert(err);
+         });
    }
+
+
 
    useEffect(() => {
       let isMounted = true;
+
+      const GetData = () => {
+         if (isMounted) {
+            setTableLoading(true);
+         }
+
+         axios.post('/api/GetRequests', {
+            'StartDate': startDate,
+            'EndDate': endDate,
+            'Room': room,
+            'Type': type,
+         }).then(res => {
+            let partialRows = [];
+
+            for (let i = 0; i < res.data.Requests.length; i++) {
+               let obj = {};
+               obj.Date = res.data.Requests[i].date;
+               obj.Time = `${mtime[res.data.Requests[i].startTime]} - ${mtime[res.data.Requests[i].endTime]}`;
+               obj.Room = res.data.Requests[i].room;
+               obj.Requester = res.data.Requests[i].requester;
+               obj.Status = res.data.Requests[i].Status;
+               obj.scheduleID = res.data.Requests[i].scheduleID;
+               partialRows.push(obj);
+            }
+
+            if (isMounted) {
+               setRows(partialRows);
+               setTableLoading(false);
+            }
+         }).catch(err => {
+            alert(err);
+         });
+      }
 
       const DropdownData = () => {
          axios.get('/api/RequestsDropdown')
@@ -218,20 +311,20 @@ const Requests = () => {
    }, [startDate, endDate, room, type, forceReloadData]);
 
    const columns = [
-      { name: 'Date', selector: 'Date', width: '100px', sortable: false },
-      { name: 'Time', selector: 'Time', width: '150px', sortable: false },
-      { name: 'Room', selector: 'Room', width: '100px', sortable: false, wrap: true },
-      { name: 'Requester', selector: 'Requester', width: '180px', sortable: false, wrap: true },
+      { name: 'Date', selector: 'Date', minWidth: '100px', sortable: false },
+      { name: 'Time', selector: 'Time', minWidth: '150px', sortable: false },
+      { name: 'Room', selector: 'Room', minWidth: '100px', sortable: false, wrap: true },
+      { name: 'Requester', selector: 'Requester', minWidth: '180px', sortable: false, wrap: true },
       {
          name: 'Status',
          sortable: false,
-         width: '150px',
+         minWidth: '150px',
          cell: row => (
             <div>
                <Typography component="div" variant="body2">
                   <Box color={row.Status === 'Approved'
                      ? 'success.main' : row.Status === 'Pending'
-                        ? 'warning.main' : 'text.primary'}
+                        ? 'warning.main' : 'error.main'}
                   >
                      {row.Status}
                   </Box>
@@ -241,7 +334,7 @@ const Requests = () => {
       },
       {
          name: 'Action',
-         width: '300px',
+         minWidth: '300px',
          cell: row => (
             <div>
                <Button variant="contained" size="small" color="primary" onClick={() => ViewDetails(`${row.scheduleID}`)}>Details</Button>
@@ -268,6 +361,7 @@ const Requests = () => {
                               color: 'white',
                               marginLeft: 5
                            }}
+                           onClick={() => handleDisapproveDialog(`${row.scheduleID}`, `${row.Date}`, `${row.Time}`, `${row.Room}`)}
                         >
                            Disapprove
                         </Button>
@@ -372,47 +466,213 @@ const Requests = () => {
             keepMounted
             onClose={() => setApproveDialog(false)}
             fullWidth
-            maxWidth="sm"
+            maxWidth="xs"
          >
             <DialogTitle style={{ textAlign: 'center' }}>Approve Request</DialogTitle>
-            <DialogContent>
-               <TableContainer>
-                  <Table>
-                     <TableHead>
-                        <TableRow>
-                           <TableCell>Date</TableCell>
-                           <TableCell>Time</TableCell>
-                           <TableCell>Room</TableCell>
-                        </TableRow>
-                     </TableHead>
-                     <TableBody>
-                        <TableRow>
-                           <TableCell>{ApproveDetails.Date}</TableCell>
-                           <TableCell>{ApproveDetails.Time}</TableCell>
-                           <TableCell>{ApproveDetails.Room}</TableCell>
-                        </TableRow>
-                     </TableBody>
-                  </Table>
-               </TableContainer>
-            </DialogContent>
-            <DialogActions style={{ padding: 24 }}>
+            <DialogContent style={{ display: 'flex', justifyContent: 'center', padding: 20 }}>
                <Button
                   onClick={() => setApproveDialog(false)}
                   color="inherit"
                   style={{
                      backgroundColor: colors.green[700],
-                     color: 'white'
+                     color: 'white',
+                     marginRight: 5
                   }}
                   onClick={handleApprove}
                >
                   {
-                     ApproveLoading
+                     ApproveDetails.Loading
                         ? <CircularProgress size={24} color="inherit" />
                         : 'Approve'
                   }
                </Button>
                <Button onClick={() => setApproveDialog(false)} color="default" variant="outlined">
                   Cancel
+               </Button>
+            </DialogContent>
+         </Dialog>
+         <Dialog
+            open={DisapproveDialog}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={() => setDisapproveDialog(false)}
+            fullWidth
+            maxWidth="xs"
+         >
+            <DialogTitle style={{ textAlign: 'center' }}>Disapprove Request</DialogTitle>
+            <DialogContent style={{ display: 'flex', justifyContent: 'center', padding: 20 }}>
+               <Button
+                  onClick={() => setDisapproveDialog(false)}
+                  color="inherit"
+                  style={{
+                     backgroundColor: colors.red[700],
+                     color: 'white',
+                     marginRight: 5
+                  }}
+                  onClick={handleDisapprove}
+               >
+                  {
+                     DisapproveDetails.Loading
+                        ? <CircularProgress size={24} color="inherit" />
+                        : 'Disapprove'
+                  }
+               </Button>
+               <Button onClick={() => setDisapproveDialog(false)} color="default" variant="outlined">
+                  Cancel
+               </Button>
+            </DialogContent>
+         </Dialog>
+         <Dialog
+            open={DetailsData.Dialog}
+            TransitionComponent={Transition}
+            keepMounted
+            onClose={() => setDetailsData(state => ({ ...state, Dialog: false }))}
+            fullWidth
+            maxWidth="md"
+         >
+            <DialogTitle style={{ textAlign: 'center' }}>Request Details</DialogTitle>
+            <DialogContent>
+               {
+                  DetailsData.Loading
+                     ? <LinearProgress color="secondary" style={{ width: '100%' }} />
+                     : <Grid container spacing={2}>
+                        <Grid item xl={4} lg={4} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.Subject}
+                              label="Subject"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={4} lg={4} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.Instructor}
+                              label="Instructor"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={4} lg={4} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.Date}
+                              label="Date"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={3} lg={3} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.Time}
+                              label="Time"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={2} lg={2} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.Room}
+                              label="Room"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={2} lg={2} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.NoOfStudents}
+                              label="No Of Persons"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={5} lg={5} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.Department}
+                              label="Department"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={4} lg={4} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.Requester}
+                              label="Requester"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={4} lg={4} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.ContactNo}
+                              label="ContactNo"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={4} lg={4} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.Purpose}
+                              label="Purpose"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={3} lg={3} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.StudentID}
+                              label="StudentID"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={9} lg={9} md={12} sm={12} xs={12}>
+                           <TextField
+                              type="text"
+                              variant="outlined"
+                              value={DetailsData.Equipments}
+                              label="Equipments"
+                              inputProps={{ readOnly: true }}
+                              fullWidth
+                           />
+                        </Grid>
+                        <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                           <Typography variant="caption">
+                              {
+                                 DetailsData.Status === 'Approved'
+                                    ? `Approved by ${DetailsData.ActionBy} on ${DetailsData.ActionDate}`
+                                    : DetailsData.Status === 'Disapproved'
+                                       ? `Disapproved by ${DetailsData.ActionBy} on ${DetailsData.ActionDate}`
+                                       : `Date Requested on ${DetailsData.DateRequested}`
+                              }
+                           </Typography>
+                        </Grid>
+                     </Grid>
+               }
+            </DialogContent>
+            <DialogActions style={{ padding: 24 }}>
+               <Button onClick={() => setDetailsData(state => ({ ...state, Dialog: false }))} color="default" variant="outlined">
+                  Close
                </Button>
             </DialogActions>
          </Dialog>

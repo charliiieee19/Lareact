@@ -163,12 +163,18 @@ class ApiController extends Controller
 
    public function GetStudentRequests()
    {
-      $session = session('isLoggedIn');
-      $qRequests = DB::select('SELECT * FROM schedules1 WHERE studentID = ?', array($session[0]->StudentID));
+      if (session('isLoggedIn')) {
+         $session = session('isLoggedIn');
+         $qRequests = DB::select('SELECT * FROM schedules1 WHERE studentID = ?', array($session[0]->StudentID));
 
-      $res = array(
-         'Requests' => $qRequests
-      );
+         $res = array(
+            'Requests' => $qRequests
+         );
+      } else {
+         $res = array(
+            'Requests' => array()
+         );
+      }
 
       return json_encode($res);
    }
@@ -258,6 +264,73 @@ class ApiController extends Controller
 
             $res = array(
                'success' => true
+            );
+         } catch (\Illuminate\Database\QueryException $e) {
+            $res = array(
+               'success' => false,
+               'message' => $e->getMessage()
+            );
+         }
+      } else {
+         $res = array(
+            'success' => false,
+            'message' => 'Session Expired'
+         );
+      }
+
+      return json_encode($res);
+   }
+
+   public function DisapproveRequest(Request $request)
+   {
+      if (session('isLoggedIn')) {
+         $UserID = session('isLoggedIn')[0]->StudentID;
+         $ScheduleID = $request->post('ScheduleID');
+
+         try {
+            DB::select(
+               'CALL sp_DisapproveRequest(?, ?)',
+               array(
+                  $UserID,
+                  $ScheduleID
+               )
+            );
+
+            $res = array(
+               'success' => true
+            );
+         } catch (\Illuminate\Database\QueryException $e) {
+            $res = array(
+               'success' => false,
+               'message' => $e->getMessage()
+            );
+         }
+      } else {
+         $res = array(
+            'success' => false,
+            'message' => 'Session Expired'
+         );
+      }
+
+      return json_encode($res);
+   }
+
+   public function GetRequestDetails(Request $request)
+   {
+      if (session('isLoggedIn')) {
+         $ScheduleID = $request->post('ScheduleID');
+
+         try {
+            $sql = DB::select(
+               'CALL sp_GetRequestDetails(?)',
+               array(
+                  $ScheduleID
+               )
+            );
+
+            $res = array(
+               'success' => true,
+               'data' => $sql
             );
          } catch (\Illuminate\Database\QueryException $e) {
             $res = array(

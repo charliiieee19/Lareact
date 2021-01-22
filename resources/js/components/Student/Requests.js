@@ -64,8 +64,6 @@ const Requests = () => {
       const GetRequests = () => {
          axios.get('/api/GetStudentRequests')
             .then(res => {
-               console.log(res.data);
-
                if (isMounted) {
                   setRowData(res.data.Requests);
                   setTableLoading(false);
@@ -80,7 +78,7 @@ const Requests = () => {
       return () => {
          isMounted = false;
       }
-   }, []);
+   }, [RowData]);
 
    return (
       <div>

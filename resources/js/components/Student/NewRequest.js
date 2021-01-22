@@ -305,7 +305,6 @@ const NewRequest = () => {
    }
 
    const handleSubmit = () => {
-      console.log(RequestForm);
       let Complete = true;
 
       if (RequestForm.Subject.trim() === "") {
@@ -373,7 +372,6 @@ const NewRequest = () => {
                StartTime: RequestForm.StartTime,
                EndTime: RequestForm.EndTime
             }).then(res => {
-               console.log(res);
                if (res.data.data.length !== 0) {
                   setConflictData(res.data.data);
                   setDialogOpen(true);
@@ -394,8 +392,6 @@ const NewRequest = () => {
                         "Purpose": RequestForm.Purpose,
                         "Equipments": Equipments
                      }).then(res => {
-                        console.log(res);
-
                         if (res.data.success) {
                            handleSubmitSuccess();
                         } else {
@@ -510,7 +506,6 @@ const NewRequest = () => {
                            ...prevState,
                            Date: value
                         }))}
-                        onInput={e => console.log(e)}
                         inputProps={{ readOnly: true }}
                         fullWidth
                      />
