@@ -142,7 +142,7 @@ const SideBar = (props) => {
                <ListItemText primary="New Request" />
             </ListItem>
          </List>
-         <Divider />
+         {/* <Divider />
          <List>
             <ListItem button component={Link} to="/ContactUs">
                <ListItemIcon>
@@ -150,7 +150,7 @@ const SideBar = (props) => {
                </ListItemIcon>
                <ListItemText primary="Contact" />
             </ListItem>
-         </List>
+         </List> */}
       </div>
    );
 
@@ -181,8 +181,7 @@ const SideBar = (props) => {
                   open={Boolean(anchorEl)}
                   onClose={handleClose}
                >
-                  <MenuItem onClick={handleClose}>Profile</MenuItem>
-                  <MenuItem onClick={handleClose}>My account</MenuItem>
+                  <MenuItem onClick={handleClose}>My Profile</MenuItem>
                   <MenuItem onClick={handleLogout}>Logout</MenuItem>
                </Menu>
             </Toolbar>

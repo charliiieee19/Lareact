@@ -9,6 +9,7 @@ Route::get('{reactRoutes}', function () {
 Route::post('api/Login', 'App\Http\Controllers\Api\ApiController@Login');
 Route::post('api/GetUserInfo', 'App\Http\Controllers\Api\ApiController@GetUserInfo');
 Route::post('api/GetRequests', 'App\Http\Controllers\Api\ApiController@GetRequests');
+Route::post('api/GetRequests_Student', 'App\Http\Controllers\Api\ApiController@GetRequests_Student');
 Route::post('api/CheckConflictSchedules', 'App\Http\Controllers\Api\ApiController@CheckConflictSchedules');
 Route::post('api/SubmitRequest', 'App\Http\Controllers\Api\ApiController@SubmitRequest');
 Route::post('api/ApproveRequest', 'App\Http\Controllers\Api\ApiController@ApproveRequest');

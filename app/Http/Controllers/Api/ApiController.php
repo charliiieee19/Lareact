@@ -67,6 +67,8 @@ class ApiController extends Controller
                OR fname LIKE "%' . $key . '%" 
                OR mname LIKE "%' . $key . '%" 
                OR address LIKE "%' . $key . '%" 
+               OR college LIKE "%' . $key . '%" 
+               OR course LIKE "%' . $key . '%" 
                ORDER BY lname ASC LIMIT ' . $offset . ',' . $perpage;
 
          $qTotalRows = 'SELECT COUNT(*) AS "Total" FROM students 
@@ -74,6 +76,8 @@ class ApiController extends Controller
                OR lname LIKE "%' . $key . '%" 
                OR fname LIKE "%' . $key . '%" 
                OR mname LIKE "%' . $key . '%" 
+               OR college LIKE "%' . $key . '%" 
+               OR course LIKE "%' . $key . '%" 
                OR address LIKE "%' . $key . '%" ';
       }
 
@@ -152,6 +156,24 @@ class ApiController extends Controller
       $qRooms = DB::select(
          'CALL sp_GetRequests(?, ?, ?, ?)',
          array($StartDate, $EndDate, $Room, $Type)
+      );
+
+      $res = array(
+         'Requests' => $qRooms
+      );
+
+      return json_encode($res);
+   }
+
+   public function GetRequests_Student(Request $request)
+   {
+      $StartDate = $request->post('StartDate');
+      $EndDate = $request->post('EndDate');
+      $Room = $request->post('Room');
+
+      $qRooms = DB::select(
+         'CALL sp_GetRequests_Student(?, ?, ?)',
+         array($StartDate, $EndDate, $Room)
       );
 
       $res = array(
