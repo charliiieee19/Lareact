@@ -369,4 +369,52 @@ class ApiController extends Controller
 
       return json_encode($res);
    }
+
+   public function InsertVisits()
+   {
+      // $Browser = $request->post('Browser');
+      // $IP = $request->post('IP');
+
+      $user_agent = $_SERVER['HTTP_USER_AGENT'];
+      $ip_address = $_SERVER["REMOTE_ADDR"];
+      $page_name = $_SERVER["SCRIPT_NAME"];
+      $current_page = $page_name;
+
+      try {
+         DB::select(
+            'CALL sp_InsertVisits(?, ?)',
+            array($user_agent, $ip_address)
+         );
+
+         $res = array(
+            'success' => true
+         );
+      } catch (\Illuminate\Database\QueryException $e) {
+         $res = array(
+            'success' => false,
+            'message' => $e->getMessage()
+         );
+      }
+
+      return json_encode($res);
+   }
+
+   public function GetVisits()
+   {
+      try {
+         $sql = DB::select('CALL sp_GetVisits()');
+
+         $res = array(
+            'success' => true,
+            'data' => $sql
+         );
+      } catch (\Illuminate\Database\QueryException $e) {
+         $res = array(
+            'success' => false,
+            'message' => $e->getMessage()
+         );
+      }
+
+      return json_encode($res);
+   }
 }

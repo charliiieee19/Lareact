@@ -111,6 +111,8 @@ const SideBar = (props) => {
    }, []);
 
    const handleLogout = () => {
+      localStorage.clear();
+      
       axios.get('/api/Logout')
          .then(res => {
             localStorage.clear();

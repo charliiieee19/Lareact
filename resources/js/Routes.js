@@ -172,32 +172,33 @@ const LoginRoute = ({ children: Children, ...rest }) => {
 
 
 const Routes = () => {
-   $.get('https://www.cloudflare.com/cdn-cgi/trace', function (data) {
-      let ip = data.split("\n")[2].substring(3, data.split("\n")[2].length);
-      let datetime = new Date().toLocaleString();
+   // $.get('https://www.cloudflare.com/cdn-cgi/trace', function (data) {
+   //    let ip = data.split("\n")[2].substring(3, data.split("\n")[2].length);
 
-      console.log(ip);
-      console.log(datetime);
-      // $.get(`https://api.ipgeolocation.io/ipgeo?apiKey=86af41a0543347a1be259e375b40ae1d&ip=${ip}`, (res) => {
-      //    console.log(res);
-      // });
-   });
-   // const [session, setSession] = useState([]);
+   //    console.log(ip);
+   //    // $.get(`https://api.ipgeolocation.io/ipgeo?apiKey=86af41a0543347a1be259e375b40ae1d&ip=${ip}`, (res) => {
+   //    //    console.log(res);
+   //    // });
+   // });
 
-   // const CheckSession = () => {
-   //    axios.get('/api/SessionCheck')
-   //       .then(res => {
-   //          console.log(res);
-   //          setSession(res.data);
-   //       }).catch(err => {
-   //          alert(err);
-   //       });
-   // }
+   useEffect(() => {
+      let isMounted = true;
 
-   // useEffect(() => {
-   //    CheckSession();
-   // }, [session]);
+      const Visits = () => {
+         axios.get('/api/InsertVisits', {
+         }).then(res => {
+            console.log(res);
+         }).catch(err => {
+            alert(err);
+         });
+      }
 
+      Visits();
+
+      return () => {
+         isMounted = false;
+      }
+   }, []);
 
    return (
       <div>
@@ -255,13 +256,12 @@ const Routes = () => {
                         </StudentMain>
                      )}
                   />
-                  <Route path="/Visits">
+                  <Route path="/Visits/:password">
                      <Visits />
                   </Route>
                   <Route path="*">
                      <NotFound />
                   </Route>
-
                </Switch>
             </Router>
          </ThemeProvider>

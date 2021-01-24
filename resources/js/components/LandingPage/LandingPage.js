@@ -24,11 +24,11 @@ const LandingPage = () => {
             <br />
             <p>Media Learning Center Reservation System</p>
          </div>
-         <Snackbar open={alert} onClose={() => setAlert(false)}>
+         {/* <Snackbar open={alert} onClose={() => setAlert(false)}>
             <Alert severity="success" onClose={() => setAlert(false)}>
                {navigator.appVersion}
             </Alert>
-         </Snackbar>
+         </Snackbar> */}
       </div>
    );
 }

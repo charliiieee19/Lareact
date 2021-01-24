@@ -36,7 +36,7 @@ const Dashboard = () => {
 
    return (
       <Grid container spacing={2}>
-         <Grid item lg={3} md={6} sm={12} xs={12}>
+         <Grid item xl={2} lg={3} md={6} sm={12} xs={12}>
             <Card>
                <CardContent>
                   <Grid
@@ -70,7 +70,7 @@ const Dashboard = () => {
                </CardContent>
             </Card>
          </Grid>
-         <Grid item lg={3} md={6} sm={12} xs={12}>
+         <Grid item xl={2} lg={3} md={6} sm={12} xs={12}>
             <Card>
                <CardContent>
                   <Grid
@@ -104,7 +104,7 @@ const Dashboard = () => {
                </CardContent>
             </Card>
          </Grid>
-         <Grid item lg={3} md={6} sm={12} xs={12}>
+         <Grid item xl={2} lg={3} md={6} sm={12} xs={12}>
             <Card>
                <CardContent>
                   <Grid

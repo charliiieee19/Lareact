@@ -176,75 +176,79 @@ const Schedules = () => {
 
    return (
       <div style={{ marginTop: '10vh', padding: 30 }}>
-         <Card className={classes.card}>
-            <div className={classes.cardTitle}>
-               <Typography variant="h5">
-                  Schedules
-               </Typography>
-            </div>
-            <Grid
-               container
-               spacing={2}
-               justify="center"
-               alignItems="center"
-               direction="row"
-            >
-               <Grid item xl={2} lg={3} md={6} sm={12} xs={12} >
-                  <TextField
-                     variant="outlined"
-                     type="date"
-                     label="Start Date"
-                     value={startDate}
-                     onInput={(event) => setStartDate(event.target.value)}
-                     fullWidth
-                  />
-               </Grid>
-               <Grid item xl={2} lg={3} md={6} sm={12} xs={12}>
-                  <TextField
-                     variant="outlined"
-                     type="date"
-                     label="End Date"
-                     value={endDate}
-                     onInput={(event) => setEndDate(event.target.value)}
-                     min={startDate}
-                     fullWidth
-                  />
-               </Grid>
-               <Grid item xl={2} lg={3} md={6} sm={12} xs={12}>
-                  <FormControl variant="outlined" fullWidth>
-                     <InputLabel id="RoomLabel">Room</InputLabel>
-                     <Select
-                        labelId="RoomLabel"
-                        id="Type"
-                        value={room}
-                        onChange={(event) => setRoom(event.target.value)}
-                        label="Room"
-                     >
-                        <MenuItem value="All">All</MenuItem>
-                        {
-                           DDroom.map(data => (
-                              <MenuItem key={data.id} value={data.roomName}>{data.roomName}</MenuItem>
-                           ))
-                        }
-                     </Select>
-                  </FormControl>
-               </Grid>
+         <Grid container spacing={2} justify="center">
+            <Grid item xl={8} lg={10} md={12} sm={12} xs={12}>
+               <Card className={classes.card}>
+                  <div className={classes.cardTitle}>
+                     <Typography variant="h5">
+                        Schedules
+                     </Typography>
+                  </div>
+                  <Grid
+                     container
+                     spacing={2}
+                     justify="center"
+                     alignItems="center"
+                     direction="row"
+                  >
+                     <Grid item xl={3} lg={3} md={6} sm={12} xs={12} >
+                        <TextField
+                           variant="outlined"
+                           type="date"
+                           label="Start Date"
+                           value={startDate}
+                           onInput={(event) => setStartDate(event.target.value)}
+                           fullWidth
+                        />
+                     </Grid>
+                     <Grid item xl={3} lg={3} md={6} sm={12} xs={12}>
+                        <TextField
+                           variant="outlined"
+                           type="date"
+                           label="End Date"
+                           value={endDate}
+                           onInput={(event) => setEndDate(event.target.value)}
+                           min={startDate}
+                           fullWidth
+                        />
+                     </Grid>
+                     <Grid item xl={3} lg={3} md={6} sm={12} xs={12}>
+                        <FormControl variant="outlined" fullWidth>
+                           <InputLabel id="RoomLabel">Room</InputLabel>
+                           <Select
+                              labelId="RoomLabel"
+                              id="Type"
+                              value={room}
+                              onChange={(event) => setRoom(event.target.value)}
+                              label="Room"
+                           >
+                              <MenuItem value="All">All</MenuItem>
+                              {
+                                 DDroom.map(data => (
+                                    <MenuItem key={data.id} value={data.roomName}>{data.roomName}</MenuItem>
+                                 ))
+                              }
+                           </Select>
+                        </FormControl>
+                     </Grid>
+                  </Grid>
+                  <Grid container>
+                     <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
+                        <DataTable
+                           theme="dark"
+                           columns={columns}
+                           data={rows}
+                           pagination
+                           paginationRowsPerPageOptions={[10, 25, 50, 100]}
+                           progressPending={TableLoading}
+                           progressComponent={Loading}
+                           responsive
+                        />
+                     </Grid>
+                  </Grid>
+               </Card>
             </Grid>
-            <Grid container>
-               <Grid item xl={12} lg={12} md={12} sm={12} xs={12}>
-                  <DataTable
-                     theme="dark"
-                     columns={columns}
-                     data={rows}
-                     pagination
-                     paginationRowsPerPageOptions={[10, 25, 50, 100]}
-                     progressPending={TableLoading}
-                     progressComponent={Loading}
-                     responsive
-                  />
-               </Grid>
-            </Grid>
-         </Card>
+         </Grid>
       </div>
    );
 }
