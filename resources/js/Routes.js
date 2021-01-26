@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useEffect } from 'react';
 import ReactDOM from 'react-dom';
 import { BrowserRouter as Router, Switch, Route, Redirect } from 'react-router-dom';
 import '../css/app.css';
@@ -21,12 +21,7 @@ const theme = createMuiTheme({
    }
 });
 
-TopBarProgress.config({
-   barColors: {
-      "0": "cyan"
-   },
-   barThickness: 2
-});
+TopBarProgress.config({ barColors: { "0": "cyan" }, barThickness: 2 });
 
 //LandingPage
 const LPMain = LazyLoading(() => import("./components/LandingPage/Main"), { fallback: <TopBarProgress /> });
@@ -52,7 +47,6 @@ const AdminRequests = LazyLoading(() => import("./components/Admin/Requests"), {
 const StudentMain = LazyLoading(() => import("./components/Student/Main"), { fallback: <TopBarProgress /> });
 const StudentRequests = LazyLoading(() => import("./components/Student/Requests"), { fallback: <TopBarProgress /> });
 const StudentNewRequest = LazyLoading(() => import("./components/Student/NewRequest"), { fallback: <TopBarProgress /> });
-
 
 const AdminPrivateRoute = ({ children: Children, ...rest }) => {
    let session = false;
@@ -170,17 +164,7 @@ const LoginRoute = ({ children: Children, ...rest }) => {
    )
 }
 
-
 const Routes = () => {
-   // $.get('https://www.cloudflare.com/cdn-cgi/trace', function (data) {
-   //    let ip = data.split("\n")[2].substring(3, data.split("\n")[2].length);
-
-   //    console.log(ip);
-   //    // $.get(`https://api.ipgeolocation.io/ipgeo?apiKey=86af41a0543347a1be259e375b40ae1d&ip=${ip}`, (res) => {
-   //    //    console.log(res);
-   //    // });
-   // });
-
    useEffect(() => {
       let isMounted = true;
 

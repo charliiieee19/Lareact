@@ -13,9 +13,9 @@ const Visits = () => {
    const [rows, setRows] = useState([]);
 
    const columns = [
-      { name: 'Browser', selector: 'Browser', minWidth: '100px', sortable: false, wrap: true },
+      { name: 'Browser', selector: 'Browser', minWidth: '300px', sortable: false, wrap: true },
       { name: 'IP', selector: 'ip', minWidth: '150px', sortable: false, wrap: true },
-      { name: 'Date', selector: 'date', minWidth: '100px', sortable: false, wrap: true },
+      { name: 'Date', selector: 'date', minWidth: '200px', sortable: false, wrap: true },
    ];
 
    useEffect(() => {
@@ -24,8 +24,6 @@ const Visits = () => {
       const GetData = () => {
          axios.get('/api/GetVisits')
             .then(res => {
-               console.log(res);
-
                if(isMounted) {
                   setRows(res.data.data);
                }
@@ -55,6 +53,7 @@ const Visits = () => {
                            pagination
                            paginationRowsPerPageOptions={[10, 25, 50, 100]}
                            responsive
+                           noHeader={true}
                         />
                      </Card>
                      : ''
